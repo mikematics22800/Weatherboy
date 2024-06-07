@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { LoadScript, Autocomplete } from "@react-google-maps/api"
-import { mapsApiKey } from '../apis';
 import { Search } from '@mui/icons-material'
+
+const mapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
 const libraries = ['places'];
 
@@ -23,7 +24,7 @@ const Searchbar = ({setLat, setLon}) => {
           onLoad={(e) => {setLocation(e)}}
         >
           <div className='input-container'>
-            <input placeholder="Enter a city..."/>
+            <input placeholder="Search for a City..."/>
             <Search/>
           </div>
         </Autocomplete>

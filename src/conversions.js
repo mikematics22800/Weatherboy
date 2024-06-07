@@ -41,3 +41,13 @@ export const degToDir = (deg) => {
   return dir;
 };
 
+export const getTime = (date) => {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let meridiem = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  const time = `${hours}:${minutes} ${meridiem}`;
+  return time;
+}
