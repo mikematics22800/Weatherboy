@@ -10,17 +10,29 @@
   @apply hidden
 }
 
-#page {
-  @apply w-screen h-screen bg-blue-100
+#root {
+  @apply w-screen min-h-screen bg-blue-200
 }
 
-header {
+nav {
   background-image: linear-gradient(to right, skyblue , rgb(30 64 175));
-  @apply w-full h-24 flex items-center justify-center text-white font-bold italic text-4xl
+  @apply w-full h-24 flex items-center sm:justify-between px-[5%] justify-center
 }
 
-#main {
-  @apply flex sm:flex-row flex-col p-10 w-full gap-10 bg-blue-100
+#home {
+  @apply w-screen flex flex-col gap-10 p-10
+}
+
+#error {
+  @apply w-screen h-screen flex flex-col items-center justify-center gap-5
+}
+
+nav h1 {
+  @apply text-white font-bold italic text-4xl
+}
+
+nav img {
+  @apply w-10 h-10
 }
 
 #searchbar {
@@ -48,25 +60,37 @@ input {
 }
 
 #current {
-  @apply bg-blue-800 text-white font-bold rounded-md shadow-lg p-10 flex flex-col gap-2
+  @apply bg-blue-800 text-white font-bold rounded-md shadow-lg p-10 flex flex-col gap-2 w-full
 }
 
 #current h1 {
-  @apply text-2xl
+  @apply sm:text-2xl text-lg
 }
 
 #current h2 {
-  @apply text-xl
+  @apply sm:text-xl
 }
 
 #forecast {
-  @apply bg-blue-800 font-bold text-white rounded-md shadow-lg p-10 flex flex-col
+  @apply bg-blue-800 font-bold text-white rounded-md shadow-lg p-10 sm:p-20 flex flex-col items-center gap-10 w-full
 }
 
 #forecast h1 {
-  @apply font-bold text-2xl mb-10
+  @apply  sm:text-2xl text-lg
 }
 
 #forecast h2 {
   @apply text-sm
+}
+
+#chart {
+  @apply 2xl:h-96 xl:h-80 lg:h-64 md:h-48 w-full
+}
+
+.period {
+  @apply  bg-blue-950 flex flex-col rounded-md p-4 w-64
+}
+
+#periods {
+  @apply flex flex-wrap gap-4 justify-center
 }

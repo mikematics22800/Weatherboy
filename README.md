@@ -1,30 +1,35 @@
-# Weather-Watch, a React application that dispalys weather data from [OpenWeatherMap](https://openweathermap.org/).
+# Weatherboy
 
-## Installation
+## Description
+A fully responsive React app that fetches and displays weather conditions and forecasts for your current location and cities worldwide, along with an interactive global map that displays satellite derived weather data.
 
-You'll need to install [Git](https://git-scm.com/downloads) and [Node Package Manager](https://www.npmjs.com/) if you haven't already.
+[![](./public/screenshot.png)](https://mikemedina22800.github.io/Weatherboy)
 
-Run the following commands in Terminal (Mac/Linux) or Git Bash (Windows) to clone the repository in your desired directory.
-```
-cd $desired_directory
-git clone https://github.com/mikemedina22800/Weather-Watch
-```
+## Installation and Usage
+Before you begin, you'll need API keys from [OpenWeather](https://openweathermap.org/) and [Google Maps Platform](https://developers.google.com/maps).
 
-Run the following commands to open the repository and install the necessary dependencies.
-```
-cd Weather-Watch
+```bash
+# Navigate to your desired directory
+cd path/to/your/desired/directory
+
+# Clone the repository
+git clone https://github.com/mikemedina22800/Weatherboy
+
+# Enter the project directory
+cd Weatherboy
+
+# Install dependencies
 npm i
-```
 
-Run the following command to run the app on your browser and navigate to http://localhost:5173/.
-```
+# Create a .env file and add your API keys (replace YOUR_KEY with your actual API keys)
+echo VITE_OPEN_WEATHER_API_KEY="$key" > .env
+echo VITE_GOOGLE_MAPS_API_KEY="$key" >> .env
+
+# Start the development server
 npm run dev
 ```
 
-Edit the source code in an Integrated Development Environment such as [Visual Studio Code](https://code.visualstudio.com/) to see changes reflected in your browser. Happy hacking!
+After starting the development server, open [http://localhost:5174/weatherboy](http://localhost:5174/weatherboy) in your browser to view the application.
 
-![](./public/screenshot.png)
-Github Pages Link: https://mikemedina22800.github.io/Weather-Watch
-
-
-
+## License
+[![alt text](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)

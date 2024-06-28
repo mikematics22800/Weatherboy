@@ -1,4 +1,4 @@
-const owmApiKey = import.meta.env.VITE_OPEN_WEATHER_MAP_API_KEY
+const owmApiKey = import.meta.env.VITE_OPEN_WEATHER_API_KEY
 
 export const fetchCurrentWeather = async (lat, lon) => {
   try {

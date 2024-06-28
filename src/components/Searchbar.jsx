@@ -1,13 +1,8 @@
 import { useState } from 'react'
-import { LoadScript, Autocomplete } from "@react-google-maps/api"
+import { Autocomplete } from "@react-google-maps/api"
 import { Search } from '@mui/icons-material'
 
-const mapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-
-const libraries = ['places'];
-
 const Searchbar = ({setLat, setLon}) => {
-
   const [location, setLocation] = useState(null)
 
   const submit = (e) => {
@@ -18,18 +13,15 @@ const Searchbar = ({setLat, setLon}) => {
 
   return (
     <form id="searchbar" onSubmit={submit}>
-      <LoadScript googleMapsApiKey={mapsApiKey} libraries={libraries}>
-        <Autocomplete 
-          types={['(cities)']}
-          onLoad={(e) => {setLocation(e)}}
-        >
-          <div className='input-container'>
-            <input placeholder="Search for a City..."/>
-            <Search/>
-          </div>
-        </Autocomplete>
-      </LoadScript>
-      <button type='submit'>Search</button>
+      <Autocomplete 
+        types={['(cities)']}
+        onLoad={(e) => {setLocation(e)}}
+      >
+        <div className='input-container'>
+          <input placeholder="Search for a city..."/>
+          <Search/>
+        </div>
+      </Autocomplete>
     </form>
   )
 }
