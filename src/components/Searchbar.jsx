@@ -1,28 +1,29 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { Context } from '../routes/Root'
 import { Autocomplete } from "@react-google-maps/api"
 import { Search } from '@mui/icons-material'
 
-const Searchbar = ({setLat, setLon}) => {
+const Searchbar = () => {
   const [location, setLocation] = useState(null)
+  const { setLat, setLon } = useContext(Context)
 
-  const submit = (e) => {
-    e.preventDefault()
+  const submit = () => {
     setLat(location.getPlace().geometry.location.lat())
     setLon(location.getPlace().geometry.location.lng())
+    console.log(location)
   }
 
   return (
-    <form id="searchbar" onSubmit={submit}>
-      <Autocomplete 
-        types={['(cities)']}
-        onLoad={(e) => {setLocation(e)}}
-      >
-        <div className='input-container'>
-          <input placeholder="Search for a city..."/>
-          <Search/>
-        </div>
-      </Autocomplete>
-    </form>
+    <Autocomplete 
+      types={['(cities)']}
+      onLoad={(e) => {setLocation(e)}}
+      onPlaceChanged={submit}
+    >
+      <div id='searchbar'>
+        <input placeholder="Search for a city..."/>
+        <Search/>
+      </div>
+    </Autocomplete>
   )
 }
 

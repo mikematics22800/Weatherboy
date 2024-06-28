@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { Context } from '../routes/Root'
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { kToF } from "../libs/conversions";
@@ -5,7 +7,8 @@ import { kToF } from "../libs/conversions";
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 Chart.defaults.color = 'white'; 
 
-const TempChart = ({forecast}) => {
+const TempChart = () => {
+  const { forecast } = useContext(Context)
 
   const temps = forecast?.list.map((period) => {
     return kToF(period.main.temp)

@@ -36,11 +36,7 @@ nav img {
 }
 
 #searchbar {
-  @apply sm:w-[36rem] w-full flex flex-col
-}
-
-.input-container {
-  @apply shadow-lg rounded-md text-xl outline-none w-full bg-white flex justify-between items-center pr-4
+  @apply shadow-lg rounded-md text-xl outline-none max-w-[36rem] w-full bg-white flex justify-between items-center pr-4
 }
 
 input {
