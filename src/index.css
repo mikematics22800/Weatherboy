@@ -40,7 +40,7 @@ nav img {
 }
 
 .input-container {
-  @apply shadow-lg rounded-md text-xl outline-none w-96 bg-white flex justify-between items-center pr-4
+  @apply shadow-lg rounded-md text-xl outline-none w-full bg-white flex justify-between items-center pr-4
 }
 
 input {
