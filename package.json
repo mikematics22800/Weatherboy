@@ -1,5 +1,5 @@
 {
-  "name": "weather-watch",
+  "name": "weatherboy",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -38,5 +38,5 @@
     "tailwindcss": "^3.4.3",
     "vite": "^5.2.0"
   },
-  "homepage": "https://mikemedina22800.github.io/weatherboy"
+  "homepage": "https://mikematics22800.github.io/weatherboy"
 }
