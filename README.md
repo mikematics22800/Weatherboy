@@ -1,11 +1,16 @@
 # Weatherboy
+## Table of Contents
+- [Description](#description)
+- [Installation](#installation)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Description
-A fully responsive React app that fetches and displays weather conditions and forecasts for your current location and cities worldwide, along with an interactive global map that displays satellite derived weather data.
+A web client that displays current weather conditions and forecasts for the user's current location and cities across the world. The user can query cities using a search bar with autocomplete functionality. Additionally, the app includes an interactive map which displays satellite derived weather data across the globe.
 
 [![](./public/screenshot.png)](https://mikemedina22800.github.io/Weatherboy)
 
-## Installation and Usage
+## Installation
 Before you begin, you'll need API keys from [OpenWeather](https://openweathermap.org/) and [Google Maps Platform](https://developers.google.com/maps).
 
 ```bash
