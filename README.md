@@ -1,8 +1,9 @@
 # Weatherboy
+
 ## Table of Contents
 - [Description](#description)
 - [Installation](#installation)
-- [Contributing](#contributing)
+- [Node Packages](#node-packages)
 - [License](#license)
 
 ## Description
@@ -16,25 +17,22 @@ Before you begin, you'll need API keys from [OpenWeather](https://openweathermap
 ```bash
 # Navigate to your desired directory
 cd path/to/your/desired/directory
-
 # Clone the repository
 git clone https://github.com/mikemedina22800/Weatherboy
-
 # Enter the project directory
 cd Weatherboy
-
 # Install dependencies
 npm i
-
 # Create a .env file and add your API keys (replace YOUR_KEY with your actual API keys)
 echo VITE_OPEN_WEATHER_API_KEY="$key" > .env
 echo VITE_GOOGLE_MAPS_API_KEY="$key" >> .env
-
 # Start the development server
 npm run dev
 ```
-
 After starting the development server, open [http://localhost:5174/weatherboy](http://localhost:5174/weatherboy) in your browser to view the application.
+
+## Node Packages
+React | React Router | Vite | Tailwind CSS | Material UI | Chart.js | Leaflet
 
 ## License
 [![alt text](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
