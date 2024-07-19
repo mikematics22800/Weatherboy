@@ -23,7 +23,7 @@ git clone https://github.com/mikematics22800/Weatherboy
 cd Weatherboy
 # Install dependencies
 npm i
-# Create a .env file and add your API keys (replace YOUR_KEY with your actual API keys)
+# Create a .env file and add your API keys
 echo VITE_OPEN_WEATHER_API_KEY="$key" > .env
 echo VITE_GOOGLE_MAPS_API_KEY="$key" >> .env
 # Start the development server
