@@ -9,7 +9,7 @@
 ## Description
 A web client that displays current weather conditions and forecasts for the user's current location and cities across the world. The user can query cities using a search bar with autocomplete functionality. Additionally, the app includes an interactive map which displays satellite derived weather data across the globe.
 
-[![](./public/screenshot.png)](https://mikemedina22800.github.io/Weatherboy)
+[![](./public/screenshot.png)](https://mikematics22800.github.io/Weatherboy)
 
 ## Installation
 Before you begin, you'll need API keys from [OpenWeather](https://openweathermap.org/) and [Google Maps Platform](https://developers.google.com/maps).
@@ -18,7 +18,7 @@ Before you begin, you'll need API keys from [OpenWeather](https://openweathermap
 # Navigate to your desired directory
 cd path/to/your/desired/directory
 # Clone the repository
-git clone https://github.com/mikemedina22800/Weatherboy
+git clone https://github.com/mikematics22800/Weatherboy
 # Enter the project directory
 cd Weatherboy
 # Install dependencies
