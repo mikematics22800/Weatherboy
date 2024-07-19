@@ -29,7 +29,7 @@ echo VITE_GOOGLE_MAPS_API_KEY="$key" >> .env
 # Start the development server
 npm run dev
 ```
-After starting the development server, open [http://localhost:5174/weatherboy](http://localhost:5174/weatherboy) in your browser to view the application.
+After starting the development server, open http://localhost:5174/Weatherboy in your browser to view the application.
 
 ## Node Packages
 React | React Router | Vite | Tailwind CSS | Material UI | Chart.js | Leaflet
