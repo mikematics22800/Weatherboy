@@ -20,6 +20,10 @@ const Root = () => {
     navigator.geolocation.getCurrentPosition(({coords: {latitude, longitude}}) => {
       setLat(latitude)
       setLon(longitude)
+    },
+    (error) => {
+      setLat(38.9072)
+      setLon(-77.0369)
     })
   }
 

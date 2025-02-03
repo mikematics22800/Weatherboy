@@ -5,14 +5,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from './routes/Root.jsx';
 import Home from './routes/Home.jsx';
 import WeatherMap from './routes/WeatherMap.jsx';
-import Error from './routes/Error.jsx';
 
 const router = createBrowserRouter(
   [
     {
       path: "/",
       element: <Root/>,
-      errorElement: <Error/>,
       children: [
         {
           path: "/",
