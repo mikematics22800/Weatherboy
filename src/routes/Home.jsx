@@ -58,7 +58,7 @@ function Home() {
           </div>
           <div id="forecast">
             <h1>Five Day Forecast for {forecast.city.name}, {forecast.city.country}</h1>
-            <div className="w-full bg-[skyblue] p-5 rounded-lg">
+            <div className="w-full bg-blue-950 p-5 rounded-lg">
               <TempChart/>
             </div>
             <div id="periods">
