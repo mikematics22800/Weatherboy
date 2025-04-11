@@ -14,19 +14,17 @@ const router = createBrowserRouter(
       children: [
         {
           path: "/",
-          element: <Home/>,
-          errorElement: <Error/>
+          element: <Home/>
         },
         {
           path: "/map",
-          element: <WeatherMap/>,
-          errorElement: <Error/>
-        },
+          element: <WeatherMap/>
+      },
       ]
     }
   ], 
   { 
-    basename: "/Weatherboy/" 
+    basename: "/weatherboy/" 
   }
 );
 

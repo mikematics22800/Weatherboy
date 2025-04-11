@@ -18,6 +18,7 @@ const Searchbar = () => {
       types={['(cities)']}
       onLoad={(e) => {setLocation(e)}}
       onPlaceChanged={submit}
+      className='w-full flex justify-center'
     >
       <div id='searchbar'>
         <input placeholder="Search for a city..."/>

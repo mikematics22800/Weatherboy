@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { Context } from "./Root"
 import { CircularProgress } from "@mui/material"
-import { degToDir, kToF, getTime } from "../libs/conversions"
+import { degToDir, kToF, getTime, getDay } from "../libs/conversions"
 import Searchbar from "../components/Searchbar"
 import TempChart from "../components/TempChart"
 
@@ -19,18 +19,25 @@ function Home() {
     return (
       <div className="period" key={i}>
         <div className="flex items-center justify-between">
-         <h2>{getTime(date)} - {getTime(date3HrsLater)}</h2>
-          <img className="w-16 h-16" src={icon(period.weather[0].icon, '@4x')}/>
+          <p>{getDay(date)}</p>
+          <p>{getTime(date)}-{getTime(date3HrsLater)}</p>
         </div>
         <div className="flex flex-col gap-1">
-          <h2>{period.weather[0].description.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')}</h2>
-          <div className="flex justify-between">
-            <h2>High/Low</h2>
-            <h2>{kToF(period.main.temp_max)}/{kToF(period.main.temp_min)}°F</h2>
+          <div className="flex justify-between items-center">
+            <p>{period.weather[0].description.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')}</p>
+            <img className="w-10" src={icon(period.weather[0].icon, '@4x')}/>
           </div>
           <div className="flex justify-between">
-            <h2>Humidity</h2>
-            <h2>{period.main.humidity}%</h2>
+            <p>High</p>
+            <p>{kToF(period.main.temp_max)}°F</p>
+          </div>
+          <div className="flex justify-between">
+            <p>Low</p>
+            <p>{kToF(period.main.temp_min)}°F</p>
+          </div>
+          <div className="flex justify-between">
+            <p>Humidity</p>
+            <p>{period.main.humidity}%</p>
           </div>
         </div>
       </div>
@@ -43,26 +50,30 @@ function Home() {
       {current && forecast ? (
         <div id="weather">
           <div id="current">
-            <div className="flex items-center justify-between">
-              <h1>Currently at {current.name}, {current.sys.country}</h1>
-              <img className="h-40 w-40" src={icon(current.weather[0].icon, '@4x')}/>
+            <div className="flex flex-col items-center">
+              <p className="text-center">Currently at {current.name}, {current.sys.country}</p>
+              <div className="flex justify-between items-center w-full">
+                <p>{current.weather[0].description.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')}</p>
+                <img className="w-20" src={icon(current.weather[0].icon, '@4x')}/>
+              </div>
             </div>
-            <div className="flex flex-wrap sm:gap-4 gap-2 w-full justify-between items-center">
-              <h2>{current.weather[0].description.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')}</h2>
-              <h2>Temperature {kToF(current.main.temp)}°F</h2>
-              <h2>Wind {degToDir(current.wind.deg)} at {Math.round(current.wind.speed)} mph</h2>
-              <h2>Humidity {current.main.humidity}%</h2>
-              <h2>Heat Index {kToF(current.main.feels_like)}°F</h2>
-              <h2>Air Pressure {current.main.pressure} mb</h2>
+            <div className="stats">
+              <div className="stat"><p>Temperature</p><p>{kToF(current.main.temp)}°F</p></div>
+              <div className="stat"><p>Wind</p><p>{degToDir(current.wind.deg)} at {Math.round(current.wind.speed)} mph</p></div>
+              <div className="stat"><p>Humidity</p><p>{current.main.humidity}%</p></div>
+              <div className="stat"><p>Heat Index</p><p>{kToF(current.main.feels_like)}°F</p></div>
+              <div className="stat"><p>Air Pressure</p><p>{current.main.pressure} mb</p></div> 
             </div>
           </div>
           <div id="forecast">
-            <h1>Five Day Forecast for {forecast.city.name}, {forecast.city.country}</h1>
+            <p className="text-lg">Five Day Forecast for {forecast.city.name}, {forecast.city.country}</p>
+            <div className="overflow-scroll w-full">
+              <div id="periods">
+                {periods}
+              </div>
+            </div>
             <div className="w-full bg-blue-950 p-5 rounded-lg">
               <TempChart/>
-            </div>
-            <div id="periods">
-              {periods}
             </div>
           </div>
         </div>
