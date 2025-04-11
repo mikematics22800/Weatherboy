@@ -48,7 +48,7 @@ function Home() {
     <div id="home">
       <Searchbar/>
       {current && forecast ? (
-        <div id="weather">
+        <div id="weather"> 
           <div id="current">
             <div className="flex flex-col items-center">
               <p className="text-center">Currently at {current.name}, {current.sys.country}</p>
@@ -72,7 +72,7 @@ function Home() {
                 {periods}
               </div>
             </div>
-            <div className="w-full bg-blue-950 p-5 rounded-lg">
+            <div className="chart">
               <TempChart/>
             </div>
           </div>
