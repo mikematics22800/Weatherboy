@@ -5,7 +5,6 @@ import { Link, Outlet } from "react-router-dom"
 import { Tooltip } from "@mui/material"
 import { Public, Home } from "@mui/icons-material"
 import logo from "../images/logo.png"
-import storm from "../images/storm.jpeg"
 
 export const Context = createContext()
 
@@ -45,7 +44,7 @@ const Root = () => {
 
   return (
     <Context.Provider value={value}>
-      <div id="root" style={{backgroundImage: `url(${storm})`}}>
+      <div id="root">
         <nav>
           <div className="sm:flex gap-2 items-center hidden">
             <h1>Weatherboy</h1>

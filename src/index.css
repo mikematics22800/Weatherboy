@@ -11,16 +11,16 @@
 }
 
 #root {
-  @apply w-screen min-h-screen overflow-hidden bg-cover bg-center bg-no-repeat bg-fixed 
+  @apply w-screen min-h-screen overflow-hidden  
 }
 
 nav {
-  background-image: linear-gradient(to right, skyblue , rgb(30 64 175));
+  background-image: linear-gradient(to top, skyblue , rgb(30 64 175));
   @apply w-full h-24 flex items-center sm:justify-between px-[5%] justify-center
 }
 
 #home {
-  @apply w-screen flex flex-col gap-10 p-10 
+  @apply w-screen flex flex-col gap-10 p-10 bg-cover
 }
 
 #error {
@@ -52,7 +52,7 @@ input {
 }
 
 #current {
-  @apply bg-blue-950 text-white font-bold rounded-lg shadow-lg p-8 flex flex-col gap-2 w-96 text-lg bg-opacity-50
+  @apply bg-blue-950 text-white font-bold rounded-lg shadow-lg p-8 flex flex-col gap-2 w-96 text-lg bg-opacity-50 h-fit
 }
 
 #chart {

@@ -4,6 +4,7 @@ import { CircularProgress } from "@mui/material"
 import { degToDir, kToF, getTime, getDay } from "../libs/conversions"
 import Searchbar from "../components/Searchbar"
 import TempChart from "../components/TempChart"
+import rain from "../images/rain.jpg"
 
 function Home() {
 
@@ -45,7 +46,7 @@ function Home() {
   })
 
   return (
-    <div id="home">
+    <div id="home" style={{backgroundImage: `url(${rain})`}}>
       <Searchbar/>
       {current && forecast ? (
         <div id="weather"> 

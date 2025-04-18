@@ -31,7 +31,7 @@ const TempChart = () => {
       {
         label: "Temperature (°F)",
         data: temps,
-        borderColor: "blue",
+        borderColor: "lime",
         backgroundColor: "white",
         yAxisID: "y",
         pointRadius: 2

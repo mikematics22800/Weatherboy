@@ -5,7 +5,7 @@ import { Close, Settings } from "@mui/icons-material";
 import "leaflet/dist/leaflet.css";
 
 const WeatherMap = () => {
-  const id = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
+  const id = import.meta.env.VITE_OWM_KEY;
 
   const [clouds, setClouds] = useState(true)
   const [precipitation, setPrecipitation] = useState(true)
