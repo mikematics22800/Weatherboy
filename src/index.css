@@ -32,7 +32,7 @@ nav img {
   @apply w-10 h-10
 }
 
-#searchbar {
+.searchbar {
   @apply shadow-lg rounded-md text-xl outline-none w-[36rem] max-w-full bg-white flex justify-between items-center pr-4
 }
 
@@ -41,11 +41,11 @@ input {
 }
 
 #loader {
-  @apply w-full h-full flex items-center justify-center
+  @apply w-screen h-screen flex items-center justify-center
 }
 
 #weather {
-  @apply w-full flex lg:flex-row flex-col justify-between gap-10 items-center
+  @apply w-full flex lg:flex-row flex-col justify-between gap-10 items-center lg:items-start
 }
 
 #current {

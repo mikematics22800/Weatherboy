@@ -20,7 +20,7 @@ const Searchbar = () => {
       onPlaceChanged={submit}
       className='w-full flex justify-center'
     >
-      <div id='searchbar'>
+      <div className='searchbar'>
         <input placeholder="Search for a city..."/>
         <Search/>
       </div>
