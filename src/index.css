@@ -2,16 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  @apply box-border m-0 p-0
-}
 
 * ::-webkit-scrollbar {
   @apply hidden
 }
 
 #root {
-  @apply w-screen min-h-screen overflow-hidden  
+  @apply w-screen min-h-screen  
 }
 
 nav {
@@ -48,11 +45,11 @@ input {
 }
 
 #weather {
-  @apply w-full flex justify-between gap-10
+  @apply w-full flex lg:flex-row flex-col justify-between gap-10 items-center
 }
 
 #current {
-  @apply bg-blue-950 text-white font-bold rounded-lg shadow-lg p-8 flex flex-col gap-2 w-96 text-lg bg-opacity-50 h-fit
+  @apply bg-blue-950 text-white font-bold rounded-lg shadow-lg p-8 flex flex-col gap-2 w-96 text-lg bg-opacity-50 
 }
 
 #chart {
@@ -60,11 +57,11 @@ input {
 }
 
 .period {
-  @apply bg-blue-800 flex flex-col rounded-md p-4 w-40 text-xs border-2 border-white
+  @apply bg-blue-800 flex flex-col rounded-md p-4 w-48 text-xs border-2 border-white
 }
 
 #forecast {
-  @apply relative overflow-hidden bg-blue-950 font-bold text-white rounded-lg shadow-lg p-10 flex flex-col items-center gap-10 w-[72rem] bg-opacity-50
+  @apply relative overflow-hidden bg-blue-950 font-bold text-white rounded-lg shadow-lg p-10 flex flex-col items-center gap-10 w-[72rem] bg-opacity-50 max-w-full
 }
 
 #periods {
