@@ -17,7 +17,7 @@ const WeatherMap = () => {
 
   return (
     <div className="h-screen w-screen">
-      <div className="z-10 fixed top-24 right-0 text-white">
+      <div className="z-10 fixed sm:top-20 right-0 text-white">
         {layersButton && 
           <div className="m-5">
             <Tooltip title="Layers" placement="bottom" arrow>
@@ -45,7 +45,7 @@ const WeatherMap = () => {
         }
       </div>
       <MapContainer
-        className="h-[calc(100%-6rem)] top-24 w-full fixed inset-0 pointer-events-auto"
+        className="h-[calc(100%-5rem)] sm:top-20 bottom-20 w-full fixed inset-0 pointer-events-auto"
         center={[30, -50]}
         maxBounds={[[90, 180], [-90, -180]]}
         maxZoom={15}

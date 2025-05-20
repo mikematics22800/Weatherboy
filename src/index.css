@@ -3,25 +3,23 @@
 @tailwind utilities;
 
 
-* ::-webkit-scrollbar {
+body::-webkit-scrollbar {
   @apply hidden
 }
 
-#root {
-  @apply w-screen min-h-screen  
+nav {
+  background-image: linear-gradient(to top, rgb(30 64 174), skyblue);
+  @apply w-full h-20 flex items-center sm:justify-between px-[4%] justify-center fixed bottom-0 sm:top-0 transform z-50
 }
 
-nav {
-  background-image: linear-gradient(to top, skyblue , rgb(30 64 175));
-  @apply w-full h-24 flex items-center sm:justify-between px-[5%] justify-center
+@media (min-width: 640px) {
+  nav {
+    background-image: linear-gradient(to bottom, rgb(30 64 174), skyblue);
+  }
 }
 
 #home {
-  @apply w-screen flex flex-col gap-10 p-10 bg-cover
-}
-
-#error {
-  @apply w-screen h-screen flex flex-col items-center justify-center gap-5
+  @apply w-screen h-fit sm:h-screen flex flex-col gap-8 py-8 sm:px-8 px-4 bg-cover bg-fixed sm:pb-0
 }
 
 nav h1 {
@@ -29,11 +27,11 @@ nav h1 {
 }
 
 nav img {
-  @apply w-10 h-10
+  @apply w-10
 }
 
 .searchbar {
-  @apply shadow-lg rounded-md text-xl outline-none w-[36rem] max-w-full bg-white flex justify-between items-center pr-4
+  @apply shadow-lg rounded-md text-xl outline-none w-80 sm:w-96 h-12 bg-white flex justify-between items-center pr-4 z-10
 }
 
 input {
@@ -44,16 +42,12 @@ input {
   @apply w-screen h-screen flex items-center justify-center
 }
 
-#weather {
-  @apply w-full flex lg:flex-row flex-col justify-between gap-10 items-center lg:items-start
+#weather { 
+  @apply w-full flex flex-col sm:flex-row gap-8 items-center sm:items-start justify-center z-10 pb-24 sm:p-0
 }
 
 #current {
-  @apply bg-blue-950 text-white font-bold rounded-lg shadow-lg p-8 flex flex-col gap-2 w-96 text-lg bg-opacity-50 
-}
-
-#chart {
-  @apply 2xl:h-96 xl:h-80 lg:h-64 md:h-48 min-w-full
+  @apply text-white font-bold shadow-lg flex flex-col gap-2 w-80 sm:w-96 text-lg bg-opacity-40 max-w-full
 }
 
 .period {
@@ -61,11 +55,11 @@ input {
 }
 
 #forecast {
-  @apply relative overflow-hidden bg-blue-950 font-bold text-white rounded-lg shadow-lg p-10 flex flex-col items-center gap-10 w-[72rem] bg-opacity-50 max-w-full
+  @apply overflow-hidden font-bold text-white shadow-lg flex flex-col items-center gap-4 bg-opacity-40 w-full
 }
 
 #periods {
-  @apply flex gap-4 w-fit
+  @apply flex gap-4 w-fit pb-4
 }
 
 .stats {
@@ -77,5 +71,5 @@ input {
 }
 
 .chart {
-  @apply w-full bg-blue-800 p-5 rounded-lg  border-2 border-white
+  @apply w-full bg-black bg-opacity-40 p-4 rounded-lg border-2 border-white sm:h-80 md:h-96 h-64 min-w-full
 }

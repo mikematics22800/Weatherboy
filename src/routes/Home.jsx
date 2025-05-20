@@ -7,12 +7,11 @@ import TempChart from "../components/TempChart"
 import rain from "../images/rain.jpg"
 
 function Home() {
-
   const icon = (icon, size) => {
     return `https://openweathermap.org/img/wn/${icon}${size}.png`
   }
 
-  const { current, forecast } = useContext(Context);
+  const { current, forecast, lat, lon } = useContext(Context);
 
   const periods = forecast?.list.map((period, i) => {
     const date = new Date(period.dt * 1000)
@@ -47,13 +46,14 @@ function Home() {
 
   return (
     <div id="home" style={{backgroundImage: `url(${rain})`}}>
-      <Searchbar/>
+      {lat && lon && <Searchbar/>}
+      <div className="fixed top-0 left-0 bg-blue-950 bg-opacity-50 w-screen h-screen"/>
       {current && forecast ? (
         <div id="weather"> 
           <div id="current">
             <div className="flex flex-col items-center">
               <p className="text-center">Currently at {current.name}, {current.sys.country}</p>
-              <div className="flex justify-between items-center w-full">
+              <div className="flex gap-4 items-center">
                 <p>{current.weather[0].description.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')}</p>
                 <img className="w-20" src={icon(current.weather[0].icon, '@4x')}/>
               </div>
@@ -67,7 +67,7 @@ function Home() {
             </div>
           </div>
           <div id="forecast">
-            <p className="text-lg">Five Day Forecast for {forecast.city.name}, {forecast.city.country}</p>
+            <p className="text-lg text-center">Five Day Forecast for {forecast.city.name}, {forecast.city.country}</p>
             <div className="overflow-scroll w-full">
               <div id="periods">
                 {periods}

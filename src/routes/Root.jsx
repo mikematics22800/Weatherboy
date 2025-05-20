@@ -14,7 +14,7 @@ const Root = () => {
   const [current, setCurrent] = useState(null)
   const [forecast, setForecast] = useState(null)
 
-  const value = { current, forecast, setLat, setLon }
+  const value = { current, forecast, lat, setLat, lon, setLon }
 
   const getCoords = () => {
     navigator.geolocation.getCurrentPosition(({coords: {latitude, longitude}}) => {

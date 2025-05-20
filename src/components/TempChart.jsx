@@ -74,9 +74,7 @@ const TempChart = () => {
     },
   }
   return (
-    <div id="chart">
-      <Line data={data} options={options}/>
-    </div>
+    <Line data={data} options={options}/>
   )
 }
 
