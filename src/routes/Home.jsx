@@ -67,7 +67,7 @@ function Home() {
             </div>
           </div>
           <div id="forecast">
-            <p className="text-lg text-center">Five Day Forecast for {forecast.city.name}, {forecast.city.country}</p>
+            <p className="text-lg text-center">Five Day Forecast</p>
             <div className="overflow-scroll w-full">
               <div id="periods">
                 {periods}
