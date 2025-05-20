@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react'
 import { Context } from '../routes/Root'
-import { Autocomplete } from "@react-google-maps/api"
+import { Autocomplete, LoadScript } from "@react-google-maps/api"
 import { Search } from '@mui/icons-material'
 
 const Searchbar = () => {
@@ -14,17 +14,22 @@ const Searchbar = () => {
   }
 
   return (
-    <Autocomplete 
-      types={['(cities)']}
-      onLoad={(e) => {setLocation(e)}}
-      onPlaceChanged={submit}
-      className='w-full flex justify-center'
+    <LoadScript
+      googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+      libraries={['places']}
     >
-      <div className='searchbar'>
-        <input placeholder="Search for a city..."/>
-        <Search/>
-      </div>
-    </Autocomplete>
+      <Autocomplete 
+        types={['(cities)']}
+        onLoad={(e) => {setLocation(e)}}
+        onPlaceChanged={submit}
+        className='w-full flex justify-center'
+      >
+        <div className='searchbar'>
+          <input placeholder="Search for a city..."/>
+          <Search/>
+        </div>
+      </Autocomplete>
+    </LoadScript>
   )
 }
 

@@ -11,7 +11,7 @@ function Home() {
     return `https://openweathermap.org/img/wn/${icon}${size}.png`
   }
 
-  const { current, forecast, lat, lon } = useContext(Context);
+  const { current, forecast } = useContext(Context);
 
   const periods = forecast?.list.map((period, i) => {
     const date = new Date(period.dt * 1000)
@@ -46,7 +46,7 @@ function Home() {
 
   return (
     <div id="home" style={{backgroundImage: `url(${rain})`}}>
-      {lat && lon && <Searchbar/>}
+      <Searchbar/>
       <div className="fixed top-0 left-0 bg-blue-950 bg-opacity-50 w-screen h-screen"/>
       {current && forecast ? (
         <div id="weather"> 
