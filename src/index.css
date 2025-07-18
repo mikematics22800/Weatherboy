@@ -47,7 +47,7 @@ input {
 }
 
 #current {
-  @apply text-white font-bold shadow-lg flex flex-col gap-2 w-96 max-w-full text-lg bg-opacity-40 
+  @apply text-white font-bold shadow-lg flex flex-col w-96 max-w-full border-2 border-white rounded-xl bg-blue-800 p-4 text-sm items-center
 }
 
 .period {
@@ -63,11 +63,11 @@ input {
 }
 
 .stats {
-  @apply flex flex-col gap-2 w-full justify-between items-center text-sm
+  @apply flex flex-col w-full gap-2 justify-between items-center mt-8
 }
 
 .stat {
-  @apply flex justify-between w-full bg-blue-800 p-2 rounded-md items-center border-2 border-white
+  @apply flex justify-between w-full bg-blue-800 rounded-md items-center
 }
 
 .chart {

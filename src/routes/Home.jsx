@@ -51,13 +51,9 @@ function Home() {
       {current && forecast ? (
         <div id="weather"> 
           <div id="current">
-            <div className="flex flex-col items-center">
-              <p className="text-center">Currently at {current.name}, {current.sys.country}</p>
-              <div className="flex gap-4 items-center">
-                <p>{current.weather[0].description.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')}</p>
-                <img className="w-20" src={icon(current.weather[0].icon, '@4x')}/>
-              </div>
-            </div>
+            <p className="text-center text-lg">Currently at {current.name}, {current.sys.country}</p>
+            <img className="w-20" src={icon(current.weather[0].icon, '@4x')}/>
+            <p className="text-center text-lg">{current.weather[0].description.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')}</p>
             <div className="stats">
               <div className="stat"><p>Temperature</p><p>{kToF(current.main.temp)}°F</p></div>
               <div className="stat"><p>Wind</p><p>{degToDir(current.wind.deg)} at {Math.round(current.wind.speed)} mph</p></div>
