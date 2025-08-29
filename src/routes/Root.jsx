@@ -50,7 +50,7 @@ const Root = () => {
             <h1>Weatherboy</h1>
             <img src={logo} alt="logo"/>
           </div>
-          <div className="flex items-center gap-24 text-white">
+          <div className="flex items-center gap-20 text-white">
             <Tooltip title="Home" placement="bottom" arrow>
               <Link to="/">
                 <Home className='!text-5xl hover:text-[aqua]'/>

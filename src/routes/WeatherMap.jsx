@@ -16,19 +16,29 @@ const WeatherMap = () => {
   const [layersButton, setLayersButton] = useState(true)
 
   return (
-    <div className="h-screen w-screen">
-      <div className="z-10 fixed sm:top-20 right-0 text-white">
+    <>
+      {/* Controls Layer - Positioned above everything */}
+      <div className="fixed top-20 right-0 z-[9999] text-white pointer-events-auto">
         {layersButton && 
-          <div className="m-5">
-            <Tooltip title="Layers" placement="bottom" arrow>
-              <IconButton onClick={() => {setLayersButton(false); setLayers(true)}}>
+          <div>
+            <Tooltip title="Layers" placement="left" arrow>
+              <IconButton 
+                onClick={() => {setLayersButton(false); setLayers(true)}}
+                size="large"
+                sx={{ 
+                  '&:hover': { 
+                    backgroundColor: 'transparent',
+                    boxShadow: 'none'
+                  }
+                }}
+              >
                 <Settings className="!text-5xl"/>
               </IconButton>
             </Tooltip>
           </div>
         }
         {layers &&
-          <div className="bg-black bg-opacity-50 p-5">
+          <div className="bg-black/90 rounded-lg p-4 m-4">
             <div className="flex justify-end">
               <IconButton onClick={() => {setLayers(false); setLayersButton(true)}}>
                 <Close className="text-white"/>
@@ -44,22 +54,26 @@ const WeatherMap = () => {
           </div>
         }
       </div>
-      <MapContainer
-        className="h-[calc(100%-5rem)] sm:top-20 bottom-20 w-full fixed inset-0 pointer-events-auto"
-        center={[30, -50]}
-        maxBounds={[[90, 180], [-90, -180]]}
-        maxZoom={15}
-        minZoom={3}
-        zoom={3}
-      >
-        <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        {clouds && <TileLayer url={`https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${id}`} />}
-        {precipitation && <TileLayer url={`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${id}`}/>}
-        {temp && <TileLayer url={`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${id}`}/>}
-        {wind && <TileLayer url={`https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${id}`}/>}      
-        {pressure && <TileLayer url={`https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=${id}`}/>}
-      </MapContainer> 
-    </div>
+
+      {/* Map Container */}
+      <div className="w-full h-screen pt-20">
+        <MapContainer
+          className="w-full h-full"
+          center={[30, -50]}
+          maxBounds={[[90, 180], [-90, -180]]}
+          maxZoom={15}
+          minZoom={3}
+          zoom={3}
+        >
+          <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          {clouds && <TileLayer url={`https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${id}`} />}
+          {precipitation && <TileLayer url={`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${id}`}/>}
+          {temp && <TileLayer url={`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${id}`}/>}
+          {wind && <TileLayer url={`https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${id}`}/>}      
+          {pressure && <TileLayer url={`https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=${id}`}/>}
+        </MapContainer> 
+      </div>
+    </>
   );
 };
 

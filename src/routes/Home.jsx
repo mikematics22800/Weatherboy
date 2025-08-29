@@ -17,27 +17,29 @@ function Home() {
     const date = new Date(period.dt * 1000)
     const date3HrsLater = new Date((period.dt + 10800) * 1000)
     return (
-      <div className="period" key={i}>
-        <div className="flex items-center justify-between">
-          <p>{getDay(date)}</p>
-          <p>{getTime(date)}-{getTime(date3HrsLater)}</p>
+      <div className="period-card" key={i}>
+        <div className="period-header">
+          <p className="period-day">{getDay(date)}</p>
+          <p className="period-time">{getTime(date)}-{getTime(date3HrsLater)}</p>
         </div>
-        <div className="flex flex-col gap-1">
-          <div className="flex justify-between items-center">
-            <p>{period.weather[0].description.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')}</p>
-            <img className="w-10" src={icon(period.weather[0].icon, '@4x')}/>
+        <div className="period-weather">
+          <div className="weather-main">
+            <p className="weather-desc">{period.weather[0].description.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')}</p>
+            <img className="weather-icon" src={icon(period.weather[0].icon, '@4x')} alt="weather"/>
           </div>
-          <div className="flex justify-between">
-            <p>High</p>
-            <p>{kToF(period.main.temp_max)}°F</p>
-          </div>
-          <div className="flex justify-between">
-            <p>Low</p>
-            <p>{kToF(period.main.temp_min)}°F</p>
-          </div>
-          <div className="flex justify-between">
-            <p>Humidity</p>
-            <p>{period.main.humidity}%</p>
+          <div className="weather-details">
+            <div className="detail-row">
+              <span className="detail-label">High</span>
+              <span className="detail-value">{kToF(period.main.temp_max)}°F</span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-label">Low</span>
+              <span className="detail-value">{kToF(period.main.temp_min)}°F</span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-label">Humidity</span>
+              <span className="detail-value">{period.main.humidity}%</span>
+            </div>
           </div>
         </div>
       </div>
@@ -46,39 +48,75 @@ function Home() {
 
   return (
     <div id="home" style={{backgroundImage: `url(${rain})`}}>
-      <Searchbar/>
-      <div className="fixed top-0 left-0 bg-blue-950 bg-opacity-50 w-screen h-screen"/>
-      {current && forecast ? (
-        <div id="weather"> 
-          <div id="current">
-            <p className="text-center text-lg">Currently at {current.name}, {current.sys.country}</p>
-            <img className="w-20" src={icon(current.weather[0].icon, '@4x')}/>
-            <p className="text-center text-lg">{current.weather[0].description.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')}</p>
-            <div className="stats">
-              <div className="stat"><p>Temperature</p><p>{kToF(current.main.temp)}°F</p></div>
-              <div className="stat"><p>Wind</p><p>{degToDir(current.wind.deg)} at {Math.round(current.wind.speed)} mph</p></div>
-              <div className="stat"><p>Humidity</p><p>{current.main.humidity}%</p></div>
-              <div className="stat"><p>Heat Index</p><p>{kToF(current.main.feels_like)}°F</p></div>
-              <div className="stat"><p>Air Pressure</p><p>{current.main.pressure} mb</p></div> 
-            </div>
-          </div>
-          <div id="forecast">
-            <p className="text-lg text-center">Five Day Forecast</p>
-            <div className="overflow-scroll w-full">
-              <div id="periods">
-                {periods}
+      <div className="overlay"/>
+        <Searchbar/>
+        
+        {current && forecast ? (
+          <div id="weather"> 
+            <div id="current" className="current-weather">
+              <div className="location-info">
+                <p className="location-text">{current.name}, {current.sys.country}</p>
+                <p className="weather-summary">{current.weather[0].description.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')}</p>
+              </div>
+              
+              <div className="main-weather">
+                <img className="main-icon" src={icon(current.weather[0].icon, '@4x')} alt="weather"/>
+                <div className="temperature-display">
+                  <span className="temp-value">{kToF(current.main.temp)}°</span>
+                  <span className="temp-unit">F</span>
+                </div>
+              </div>
+              
+              <div className="stats-grid">
+                <div className="stat-card">
+                  <div className="stat-icon">🌡️</div>
+                  <div className="stat-content">
+                    <p className="stat-label">Feels Like</p>
+                    <p className="stat-value">{kToF(current.main.feels_like)}°F</p>
+                  </div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-icon">💨</div>
+                  <div className="stat-content">
+                    <p className="stat-label">Wind</p>
+                    <p className="stat-value">{degToDir(current.wind.deg)} {Math.round(current.wind.speed)} mph</p>
+                  </div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-icon">💧</div>
+                  <div className="stat-content">
+                    <p className="stat-label">Humidity</p>
+                    <p className="stat-value">{current.main.humidity}%</p>
+                  </div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-icon">📊</div>
+                  <div className="stat-content">
+                    <p className="stat-label">Pressure</p>
+                    <p className="stat-value">{current.main.pressure} mb</p>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="chart">
-              <TempChart/>
+            
+            <div id="forecast" className="forecast-section">
+              <h2 className="forecast-title">5-Day Forecast</h2>
+              <div className="forecast-container">
+                <div className="forecast-scroll">
+                  {periods}
+                </div>
+              </div>
+              <div className="chart-container">
+                <TempChart/>
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <div id="loader">
-          <CircularProgress size={"5rem"}/>
-        </div>
-      )}
+        ) : (
+          <div id="loader" className="loading-container">
+            <CircularProgress size={"5rem"} className="loading-spinner"/>
+            <p className="loading-text">Loading weather data...</p>
+          </div>
+        )}
     </div>
   )
 }

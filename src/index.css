@@ -2,24 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body::-webkit-scrollbar {
   @apply hidden
 }
 
-nav {
-  background-image: linear-gradient(to top, rgb(30 64 174), skyblue);
-  @apply w-full h-20 flex items-center sm:justify-between px-[4%] justify-center fixed bottom-0 sm:top-0 transform z-50
+body {
+  @apply overflow-x-hidden
 }
 
-@media (min-width: 640px) {
-  nav {
-    background-image: linear-gradient(to bottom, rgb(30 64 174), skyblue);
-  }
+nav {
+  background-image: linear-gradient(to bottom, rgb(30 64 174), skyblue);
+  @apply w-full h-20 flex items-center xl:justify-between justify-center px-[4%] fixed top-0 transform z-50
 }
+
 
 #home {
-  @apply w-screen min-h-screen flex flex-col bg-cover bg-fixed px-8 sm:px-16 gap-8 sm:pt-20 pb-28 sm:pb-8
+  @apply w-full min-h-screen flex flex-col bg-cover bg-fixed px-8 sm:px-16 gap-8 pt-20 pb-28 sm:pb-8 relative
+}
+
+.overlay {
+  @apply fixed top-0 left-0 w-screen h-screen bg-gradient-to-b from-blue-950/60 via-blue-900/40 to-blue-800/60
 }
 
 nav h1 {
@@ -31,45 +33,274 @@ nav img {
 }
 
 .searchbar {
-  @apply shadow-lg rounded-md text-xl outline-none w-80 sm:w-96 h-12 bg-white flex justify-between items-center pr-4 z-10
+  @apply shadow-2xl rounded-2xl text-xl outline-none w-96 max-w-full h-14 bg-white backdrop-blur-sm flex items-center gap-3 pr-4 z-20 border border-white transition-all duration-300 hover:shadow-blue-500/25
 }
 
 input {
-  @apply outline-none w-full p-4 bg-transparent
+  @apply outline-none flex-1 p-4 bg-transparent placeholder-gray-500
 }
 
 #loader {
   @apply w-screen h-screen flex items-center justify-center
 }
 
+.loading-container {
+  @apply flex flex-col items-center gap-6 text-white animate-[fadeInUp_0.8s_ease-out]
+}
+
+.loading-spinner {
+  @apply text-white drop-shadow-lg
+}
+
+.loading-text {
+  @apply text-xl font-medium text-white
+}
+
 #weather { 
-  @apply w-full flex flex-col sm:flex-row gap-8 sm:gap-16 items-center justify-center z-10 sm:p-0
+  @apply flex flex-col xl:flex-row gap-8 lg:gap-12 justify-between z-10 p-4
 }
 
-#current {
-  @apply text-white font-bold shadow-lg flex flex-col w-96 max-w-full border-2 border-white rounded-xl bg-blue-800 p-4 text-sm items-center
+.current-weather {
+  @apply text-white h-fit font-bold shadow-2xl flex flex-col border border-white rounded-3xl bg-gradient-to-br from-blue-900/90 via-blue-800/80 to-blue-700/90 backdrop-blur-sm p-8 items-center animate-[fadeInUp_0.6s_ease-out] w-96 cursor-pointer flex-shrink-0 max-w-full
 }
 
-.period {
-  @apply bg-blue-800 flex flex-col rounded-md p-4 w-48 text-xs border-2 border-white
+.location-info {
+  @apply text-center
 }
 
-#forecast {
-  @apply overflow-hidden font-bold text-white shadow-lg flex flex-col items-center gap-4 bg-opacity-40 w-full
+.location-text {
+  @apply text-2xl font-semibold text-white
 }
 
-#periods {
-  @apply flex gap-4 w-fit pb-4
+.weather-summary {
+  @apply text-lg text-white capitalize drop-shadow-md
 }
 
-.stats {
-  @apply flex flex-col w-full gap-2 justify-between items-center mt-8
+.main-weather {
+  @apply flex items-center justify-center gap-6 mb-8
 }
 
-.stat {
-  @apply flex justify-between w-full bg-blue-800 rounded-md items-center
+.main-icon {
+  @apply w-24 h-24 drop-shadow-lg
 }
 
-.chart {
-  @apply w-full bg-black bg-opacity-40 p-4 rounded-lg border-2 border-white md:h-80 h-64 min-w-full
+.temperature-display {
+  @apply flex items-baseline
 }
+
+.temp-value {
+  @apply text-6xl font-bold text-white drop-shadow-lg
+}
+
+.temp-unit {
+  @apply text-2xl text-white ml-1 drop-shadow-md
+}
+
+.stats-grid {
+  @apply flex flex-wrap gap-4 w-full items-center justify-center
+}
+
+.stat-card {
+  @apply p-2 flex items-center gap-2
+}
+
+.stat-icon {
+  @apply text-2xl
+}
+
+.stat-content {
+  @apply flex flex-col
+}
+
+.stat-label {
+  @apply text-sm text-white font-medium
+}
+
+.stat-value {
+  @apply text-lg font-bold text-white
+}
+
+.forecast-section {
+  @apply w-full max-w-6xl text-white flex-1
+}
+
+.forecast-title {
+  @apply text-3xl font-bold mb-6 text-white
+}
+
+.forecast-title::after {
+  content: '';
+  @apply absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 rounded-full
+}
+
+.forecast-container {
+  @apply mb-8 w-full xl:w-4/5 overflow-hidden
+}
+
+.forecast-scroll  {
+  @apply flex gap-4 overflow-x-auto pb-4
+}
+
+.period-card {
+  @apply bg-gradient-to-br from-blue-800/90 to-blue-700/90 backdrop-blur-sm flex flex-col rounded-2xl p-4 w-48 text-sm border border-white shadow-xl transition-all duration-300 flex-shrink-0 cursor-pointer
+}
+
+.period-header {
+  @apply flex items-center justify-between mb-3 pb-2 border-b border-white
+}
+
+.period-day {
+  @apply font-semibold text-white text-base
+}
+
+.period-time {
+  @apply text-white text-xs
+}
+
+.period-weather {
+  @apply flex flex-col gap-2
+}
+
+.weather-main {
+  @apply flex justify-between items-center
+}
+
+.weather-desc {
+  @apply text-white font-medium capitalize text-sm flex-1 mr-2
+}
+
+.weather-icon {
+  @apply w-12 h-12
+}
+
+.weather-details {
+  @apply space-y-1
+}
+
+.detail-row {
+  @apply flex justify-between items-center
+}
+
+.detail-label {
+  @apply text-white text-xs
+}
+
+.detail-value {
+  @apply text-white font-semibold text-sm
+}
+
+.chart-container {
+  @apply w-full xl:w-4/5 bg-black/30 backdrop-blur-sm p-6 rounded-2xl border border-white shadow-xl hover:shadow-2xl transition-all duration-300 h-96 cursor-pointer
+}
+
+/* Enhanced animations and transitions */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom scrollbar for webkit browsers */
+.forecast-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.forecast-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.forecast-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.forecast-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Hide scrollbar for non-webkit browsers */
+.forecast-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .chart-container {
+    @apply h-64
+  }
+  
+  /* Current weather container text sizing for small devices */
+  .current-weather {
+    @apply p-6
+  }
+  
+  .location-text {
+    @apply text-xl
+  }
+  
+  .weather-summary {
+    @apply text-base
+  }
+  
+  .temp-value {
+    @apply text-5xl
+  }
+  
+  .temp-unit {
+    @apply text-xl
+  }
+  
+  .stat-label {
+    @apply text-xs
+  }
+  
+  .stat-value {
+    @apply text-base
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .current-weather {
+    @apply p-4
+  }
+  
+  .location-text {
+    @apply text-lg
+  }
+  
+  .weather-summary {
+    @apply text-sm
+  }
+  
+  .temp-value {
+    @apply text-4xl
+  }
+  
+  .temp-unit {
+    @apply text-lg
+  }
+  
+  .main-icon {
+    @apply w-20 h-20
+  }
+  
+  .stat-card {
+    @apply p-3
+  }
+  
+  .stat-label {
+    @apply text-xs
+  }
+  
+  .stat-value {
+    @apply text-sm
+  }
+}
+
