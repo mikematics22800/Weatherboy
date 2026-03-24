@@ -370,7 +370,6 @@ function Home() {
             </div>
 
             <div id="forecast" className="forecast-section">
-              <h2 className="forecast-title">5-Day Forecast</h2>
               <div className="forecast-container">
                 <div className="forecast-scroll">
                   {periods}
