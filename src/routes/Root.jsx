@@ -1,12 +1,12 @@
 import { createContext } from "react"
 import { useState, useEffect } from "react"
 import { fetchCurrentWeather, fetchWeatherForecast } from "../libs/apis"
-import { Link, Outlet } from "react-router-dom"
-import { Tooltip } from "@mui/material"
-import { Public, Home } from "@mui/icons-material"
-import logo from "../images/logo.png"
+import { Outlet } from "react-router-dom"
+import { useLoadScript } from "@react-google-maps/api"
 
 export const Context = createContext()
+
+const GOOGLE_MAPS_LIBRARIES = ["places"]
 
 const Root = () => {
   const [lat, setLat] = useState(null)
@@ -14,7 +14,13 @@ const Root = () => {
   const [current, setCurrent] = useState(null)
   const [forecast, setForecast] = useState(null)
 
-  const value = { current, forecast, setLat, setLon }
+  const { isLoaded: mapsReady } = useLoadScript({
+    id: "weatherboy-google-maps",
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY ?? "",
+    libraries: GOOGLE_MAPS_LIBRARIES,
+  })
+
+  const value = { current, forecast, setLat, setLon, mapsReady }
 
   const getCoords = () => {
     navigator.geolocation.getCurrentPosition(({coords: {latitude, longitude}}) => {
@@ -45,25 +51,7 @@ const Root = () => {
   return (
     <Context.Provider value={value}>
       <div id="root">
-        <nav>
-          <div className="sm:flex gap-2 items-center hidden">
-            <h1>Weatherboy</h1>
-            <img src={logo} alt="logo"/>
-          </div>
-          <div className="flex items-center gap-20 text-white">
-            <Tooltip title="Home" placement="bottom" arrow>
-              <Link to="/">
-                <Home className='!text-5xl hover:text-[aqua]'/>
-              </Link>
-            </Tooltip>
-            <Tooltip title="Weather Map" placement="bottom" arrow>
-              <Link to="map">
-                <Public className='!text-5xl hover:text-[aqua]'/>
-              </Link>
-            </Tooltip>
-          </div>
-        </nav>
-        <Outlet/>
+        <Outlet />
       </div>
     </Context.Provider>
   )

@@ -1,44 +1,65 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useRef, useCallback } from 'react'
 import { Context } from '../routes/Root'
-import { Autocomplete, LoadScript } from "@react-google-maps/api"
+import { Autocomplete } from '@react-google-maps/api'
 import { Search, LocationOn } from '@mui/icons-material'
 
 const Searchbar = () => {
-  const [location, setLocation] = useState(null)
+  const autocompleteRef = useRef(null)
   const [isFocused, setIsFocused] = useState(false)
-  const { setLat, setLon } = useContext(Context)
+  const { setLat, setLon, mapsReady } = useContext(Context)
 
-  const submit = () => {
-    if (location) {
-      setLat(location.getPlace().geometry.location.lat())
-      setLon(location.getPlace().geometry.location.lng())
-      console.log(location)
-    }
+  const onPlaceChanged = useCallback(() => {
+    const ac = autocompleteRef.current
+    if (!ac) return
+    const place = ac.getPlace()
+    const loc = place?.geometry?.location
+    if (!loc) return
+    setLat(loc.lat())
+    setLon(loc.lng())
+  }, [setLat, setLon])
+
+  const searchbarClass = `searchbar ${isFocused ? 'ring-2 ring-blue-400 ring-opacity-50' : ''}`
+
+  if (!mapsReady) {
+    return (
+      <div className="w-full flex justify-center">
+        <div className={searchbarClass}>
+          <LocationOn className="text-blue-600 ml-4 text-xl" />
+          <input
+            disabled
+            placeholder="Loading places search…"
+            className="flex-1"
+          />
+          <Search className="text-gray-400 ml-2 text-xl" />
+        </div>
+      </div>
+    )
   }
 
   return (
-    <LoadScript
-      googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
-      libraries={['places']}
+    <Autocomplete
+      types={['(cities)']}
+      fields={['geometry']}
+      onLoad={(ac) => {
+        autocompleteRef.current = ac
+      }}
+      onUnmount={() => {
+        autocompleteRef.current = null
+      }}
+      onPlaceChanged={onPlaceChanged}
+      className="w-full flex justify-center"
     >
-      <Autocomplete 
-        types={['(cities)']}
-        onLoad={(e) => {setLocation(e)}}
-        onPlaceChanged={submit}
-        className='w-full flex justify-center'
-      >
-        <div className={`searchbar ${isFocused ? 'ring-2 ring-blue-400 ring-opacity-50' : ''}`}>
-          <LocationOn className="text-blue-600 ml-4 text-xl" />
-          <input 
-            placeholder="Search for a city..."
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            className="flex-1"
-          />
-          <Search className="text-gray-500 hover:text-blue-600 transition-colors duration-200 cursor-pointer"/>
-        </div>
-      </Autocomplete>
-    </LoadScript>
+      <div className={searchbarClass}>
+        <LocationOn className="text-blue-600 ml-4 text-xl" />
+        <input
+          placeholder="Search for a city…"
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          className="flex-1"
+        />
+        <Search className="text-gray-500 hover:text-blue-600 transition-colors duration-200 cursor-pointer" />
+      </div>
+    </Autocomplete>
   )
 }
 

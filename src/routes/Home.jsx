@@ -1,17 +1,284 @@
-import { useContext } from "react"
+import { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
+import gsap from "gsap"
 import { Context } from "./Root"
 import { CircularProgress } from "@mui/material"
 import { degToDir, kToF, getTime, getDay } from "../libs/conversions"
 import Searchbar from "../components/Searchbar"
 import TempChart from "../components/TempChart"
+import Summary from "../components/Summary"
 import rain from "../images/rain.jpg"
+import { fetchReverseGeocodeRegion } from "../libs/apis"
 
 function Home() {
+  const scopeRef = useRef(null)
+  const [regionLabel, setRegionLabel] = useState(null)
+
   const icon = (icon, size) => {
     return `https://openweathermap.org/img/wn/${icon}${size}.png`
   }
 
-  const { current, forecast } = useContext(Context);
+  const { current, forecast } = useContext(Context)
+
+  useEffect(() => {
+    if (!current?.coord) return
+    const { lat, lon } = current.coord
+    let cancelled = false
+    setRegionLabel(null)
+    fetchReverseGeocodeRegion(lat, lon).then((label) => {
+      if (!cancelled) setRegionLabel(label)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [current?.coord?.lat, current?.coord?.lon])
+
+  const locationLine = useMemo(() => {
+    if (!current) return ""
+    const place = current.name?.trim() || "this location"
+    const state = regionLabel ?? current.sys?.country ?? ""
+    return state ? `Currently in ${place}, ${state}` : `Currently in ${place}`
+  }, [current, regionLabel])
+
+  const animationKey = useMemo(() => {
+    if (!current || !forecast) return null
+    const cityId = forecast.city?.id ?? forecast.city?.name ?? ""
+    return `${current.id}-${cityId}`
+  }, [current, forecast])
+
+  useLayoutEffect(() => {
+    const root = scopeRef.current
+    if (!root) return
+
+    const ctx = gsap.context(() => {
+      if (animationKey) {
+        const mm = gsap.matchMedia()
+
+        const clearAnimatedProps = () => {
+          gsap.set(
+            ".home-search-wrap, .current-weather, .location-info > *, .main-weather .main-icon, .temperature-display, .stat-card, .forecast-title, .forecast-scroll .period-card, .chart-container, .forecast-summary-block",
+            { clearProps: "transform,opacity,visibility" }
+          )
+        }
+
+        const runDataTimeline = (opts) => {
+          const {
+            ease = "power3.out",
+            searchY = -20,
+            currentY = 36,
+            currentScale = 0.97,
+            locY = 14,
+            iconRot = -14,
+            tempX = 20,
+            cardY = 18,
+            titleX = -16,
+            periodX = 24,
+            chartY = 28,
+            durations = {},
+            iconTweenEase = ease === "power3.out" ? "back.out(1.35)" : ease,
+          } = opts
+
+          const d = (key, fallback) => durations[key] ?? fallback
+          const currentDur = d("current", 0.65)
+          const t = 0
+
+          const tl = gsap.timeline({
+            defaults: { ease },
+            onComplete: clearAnimatedProps,
+          })
+
+          tl.from(
+            ".home-search-wrap",
+            { y: searchY, opacity: 0, duration: d("search", 0.5) },
+            t
+          )
+          tl.fromTo(
+            ".current-weather",
+            { autoAlpha: 0, y: currentY, scale: currentScale },
+            { autoAlpha: 1, y: 0, scale: 1, duration: currentDur },
+            t
+          )
+          tl.from(
+            ".location-info > *",
+            { y: locY, opacity: 0, duration: d("location", 0.4) },
+            t
+          )
+          tl.from(
+            ".main-weather .main-icon",
+            {
+              scale: 0,
+              rotation: iconRot,
+              opacity: 0,
+              duration: d("icon", 0.55),
+              ease: iconTweenEase,
+            },
+            t
+          )
+          tl.from(
+            ".temperature-display",
+            { x: tempX, opacity: 0, duration: d("temp", 0.48) },
+            t
+          )
+          tl.from(
+            ".stat-card",
+            { y: cardY, opacity: 0, duration: d("stats", 0.38) },
+            t
+          )
+          tl.fromTo(
+            ".forecast-title",
+            { x: titleX, autoAlpha: 0 },
+            { x: 0, autoAlpha: 1, duration: d("forecastTitle", 0.45) },
+            t
+          )
+          tl.fromTo(
+            ".forecast-summary-block",
+            { y: 12, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, duration: d("summarySlot", 0.4) },
+            t
+          )
+          tl.fromTo(
+            ".forecast-scroll .period-card",
+            { x: periodX, autoAlpha: 0 },
+            { x: 0, autoAlpha: 1, duration: d("periods", 0.42) },
+            t
+          )
+          tl.fromTo(
+            ".chart-container",
+            { y: chartY },
+            {
+              y: 0,
+              duration: d("chart", 0.5),
+              onComplete: () => {
+                window.dispatchEvent(new Event("resize"))
+              },
+            },
+            t
+          )
+        }
+
+        mm.add(
+          {
+            reduced: "(prefers-reduced-motion: reduce)",
+            mobile:
+              "(prefers-reduced-motion: no-preference) and (max-width: 639px)",
+            desktop:
+              "(prefers-reduced-motion: no-preference) and (min-width: 640px)",
+          },
+          (context) => {
+            if (context.conditions.reduced) {
+              runDataTimeline({
+                ease: "power2.out",
+                searchY: -8,
+                currentY: 12,
+                currentScale: 1,
+                locY: 6,
+                iconRot: 0,
+                tempX: 8,
+                cardY: 8,
+                titleX: -6,
+                periodX: 10,
+                chartY: 10,
+                durations: {
+                  search: 0.22,
+                  current: 0.28,
+                  location: 0.18,
+                  icon: 0.24,
+                  temp: 0.2,
+                  stats: 0.18,
+                  forecastTitle: 0.2,
+                  summarySlot: 0.18,
+                  periods: 0.22,
+                  chart: 0.26,
+                },
+              })
+              return
+            }
+            if (context.conditions.mobile) {
+              runDataTimeline({
+                searchY: -14,
+                currentY: 22,
+                currentScale: 0.99,
+                locY: 10,
+                iconRot: -8,
+                tempX: 12,
+                cardY: 12,
+                titleX: -10,
+                periodX: 16,
+                chartY: 18,
+                durations: {
+                  search: 0.42,
+                  current: 0.52,
+                  location: 0.32,
+                  icon: 0.45,
+                  temp: 0.38,
+                  stats: 0.3,
+                  forecastTitle: 0.36,
+                  summarySlot: 0.32,
+                  periods: 0.34,
+                  chart: 0.42,
+                },
+              })
+              return
+            }
+            runDataTimeline({})
+          }
+        )
+      } else {
+        const mm = gsap.matchMedia()
+
+        mm.add("(prefers-reduced-motion: reduce)", () => {
+          gsap.fromTo(
+            ".loading-spinner",
+            { opacity: 0.85 },
+            { opacity: 1, duration: 0.35, ease: "none" }
+          )
+          gsap.from(".loading-text", {
+            opacity: 0,
+            duration: 0.25,
+            ease: "power1.out",
+          })
+        })
+
+        mm.add("(prefers-reduced-motion: no-preference)", () => {
+          gsap.fromTo(
+            ".loading-spinner",
+            { opacity: 0.75, scale: 0.94 },
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 1.1,
+              ease: "sine.inOut",
+              repeat: -1,
+              yoyo: true,
+            }
+          )
+          gsap.from(".loading-text", {
+            y: 8,
+            opacity: 0,
+            duration: 0.5,
+            ease: "power2.out",
+          })
+        })
+      }
+    }, root)
+
+    return () => ctx.revert()
+  }, [animationKey])
+
+  useEffect(() => {
+    if (!animationKey) return
+    let raf = 0
+    const onResize = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => {
+        window.dispatchEvent(new Event("resize"))
+      })
+    }
+    window.addEventListener("resize", onResize, { passive: true })
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener("resize", onResize)
+    }
+  }, [animationKey])
 
   const periods = forecast?.list.map((period, i) => {
     const date = new Date(period.dt * 1000)
@@ -47,32 +314,35 @@ function Home() {
   })
 
   return (
-    <div id="home" style={{backgroundImage: `url(${rain})`}}>
-      <div className="overlay"/>
-        <Searchbar/>
-        
-        {current && forecast ? (
-          <div id="weather"> 
+    <div
+      id="home"
+      ref={scopeRef}
+      className="home-root"
+      style={{ backgroundImage: `url(${rain})` }}
+    >
+      <div className="overlay" aria-hidden />
+      <div className="home-search-wrap w-full flex justify-center z-20 mt-10 px-2 sm:px-0">
+        <Searchbar />
+      </div>
+
+      {current && forecast ? (
+        <div id="weather" className="home-weather">
+          <div className="home-weather-inner">
             <div id="current" className="current-weather">
               <div className="location-info">
-                <p className="location-text">{current.name}, {current.sys.country}</p>
-                <p className="weather-summary">{current.weather[0].description.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')}</p>
+                <p className="location-text">{locationLine}</p>
               </div>
-              
               <div className="main-weather">
                 <img className="main-icon" src={icon(current.weather[0].icon, '@4x')} alt="weather"/>
-                <div className="temperature-display">
-                  <span className="temp-value">{kToF(current.main.temp)}°</span>
-                  <span className="temp-unit">F</span>
-                </div>
+                <h1 className="sm:text-3xl text-xl font-medium">{current.weather[0].description.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')}</h1>
               </div>
-              
+
               <div className="stats-grid">
                 <div className="stat-card">
                   <div className="stat-icon">🌡️</div>
                   <div className="stat-content">
-                    <p className="stat-label">Feels Like</p>
-                    <p className="stat-value">{kToF(current.main.feels_like)}°F</p>
+                    <p className="stat-label">Temperature</p>
+                    <p className="stat-value">{kToF(current.main.temp)}°F</p>
                   </div>
                 </div>
                 <div className="stat-card">
@@ -90,15 +360,19 @@ function Home() {
                   </div>
                 </div>
                 <div className="stat-card">
-                  <div className="stat-icon">📊</div>
+                  <div className="stat-icon">⏲️</div>
                   <div className="stat-content">
-                    <p className="stat-label">Pressure</p>
+                    <p className="stat-label">Air Pressure</p>
                     <p className="stat-value">{current.main.pressure} mb</p>
                   </div>
                 </div>
               </div>
             </div>
-            
+
+            <div className="forecast-summary-block w-full min-w-0">
+              <Summary forecast={forecast} />
+            </div>
+
             <div id="forecast" className="forecast-section">
               <h2 className="forecast-title">5-Day Forecast</h2>
               <div className="forecast-container">
@@ -106,15 +380,17 @@ function Home() {
                   {periods}
                 </div>
               </div>
-              <div className="chart-container">
-                <TempChart/>
-              </div>
+            </div>
+
+            <div className="chart-container">
+              <TempChart/>
             </div>
           </div>
-        ) : (
+        </div>
+      ) : (
           <div id="loader" className="loading-container">
-            <CircularProgress size={"5rem"} className="loading-spinner"/>
-            <p className="loading-text">Loading weather data...</p>
+            <CircularProgress size="5rem" className="loading-spinner" />
+            <p className="loading-text">Loading…</p>
           </div>
         )}
     </div>

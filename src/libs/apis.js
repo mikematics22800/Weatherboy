@@ -19,3 +19,20 @@ export const fetchWeatherForecast = async (lat, lon) => {
     console.log(err)
   }
 }
+
+/** Region label from coordinates (e.g. US state). OpenWeather current weather does not include state. */
+export const fetchReverseGeocodeRegion = async (lat, lon) => {
+  if (!key) return null
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${key}`
+    )
+    const data = await response.json()
+    const place = Array.isArray(data) ? data[0] : null
+    if (!place) return null
+    return place.state || place.country || null
+  } catch (err) {
+    console.log(err)
+    return null
+  }
+}
