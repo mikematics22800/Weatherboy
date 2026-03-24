@@ -130,15 +130,15 @@ function Home() {
             t
           )
           tl.fromTo(
-            ".forecast-summary-block",
-            { y: 12, autoAlpha: 0 },
-            { y: 0, autoAlpha: 1, duration: d("summarySlot", 0.4) },
-            t
-          )
-          tl.fromTo(
             ".forecast-scroll .period-card",
             { x: periodX, autoAlpha: 0 },
             { x: 0, autoAlpha: 1, duration: d("periods", 0.42) },
+            t
+          )
+          tl.fromTo(
+            ".forecast-summary-block",
+            { y: 12, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, duration: d("summarySlot", 0.4) },
             t
           )
           tl.fromTo(
@@ -369,10 +369,6 @@ function Home() {
               </div>
             </div>
 
-            <div className="forecast-summary-block w-full min-w-0">
-              <Summary forecast={forecast} />
-            </div>
-
             <div id="forecast" className="forecast-section">
               <h2 className="forecast-title">5-Day Forecast</h2>
               <div className="forecast-container">
@@ -380,6 +376,10 @@ function Home() {
                   {periods}
                 </div>
               </div>
+            </div>
+
+            <div className="forecast-summary-block w-full min-w-0">
+              <Summary forecast={forecast} />
             </div>
 
             <div className="chart-container">
