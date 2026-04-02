@@ -27,7 +27,7 @@ const Searchbar = () => {
           <LocationOn className="text-blue-600 ml-4 text-xl" />
           <input
             disabled
-            placeholder="Loading places search…"
+            placeholder="Initializing..."
             className="flex-1"
           />
           <Search className="text-gray-400 ml-2 text-xl" />
