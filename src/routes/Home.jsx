@@ -2,12 +2,16 @@ import { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } fro
 import gsap from "gsap"
 import { Context } from "./Root"
 import { CircularProgress } from "@mui/material"
+import Air from "@mui/icons-material/Air"
+import ArrowDownward from "@mui/icons-material/ArrowDownward"
+import Thermostat from "@mui/icons-material/Thermostat"
+import WaterDrop from "@mui/icons-material/WaterDrop"
 import { degToDir, kToF, getTime, getDay } from "../libs/conversions"
 import Searchbar from "../components/Searchbar"
 import TempChart from "../components/TempChart"
 import Summary from "../components/Summary"
-import rain from "../images/rain.jpg"
 import { fetchReverseGeocodeRegion } from "../libs/apis"
+import { Compress } from "@mui/icons-material"
 
 function Home() {
   const scopeRef = useRef(null)
@@ -55,7 +59,7 @@ function Home() {
 
         const clearAnimatedProps = () => {
           gsap.set(
-            ".home-search-wrap, .current-weather, .location-info > *, .main-weather .main-icon, .temperature-display, .stat-card, .forecast-title, .forecast-scroll .period-card, .chart-container, .forecast-summary-block",
+            ".home-search-wrap, .current-weather, .location-info > *, .main-weather .main-icon, .stat-card, .forecast-scroll .period-card, .chart-container, .forecast-summary-block",
             { clearProps: "transform,opacity,visibility" }
           )
         }
@@ -68,9 +72,7 @@ function Home() {
             currentScale = 0.97,
             locY = 14,
             iconRot = -14,
-            tempX = 20,
             cardY = 18,
-            titleX = -16,
             periodX = 24,
             chartY = 28,
             durations = {},
@@ -114,19 +116,8 @@ function Home() {
             t
           )
           tl.from(
-            ".temperature-display",
-            { x: tempX, opacity: 0, duration: d("temp", 0.48) },
-            t
-          )
-          tl.from(
             ".stat-card",
             { y: cardY, opacity: 0, duration: d("stats", 0.38) },
-            t
-          )
-          tl.fromTo(
-            ".forecast-title",
-            { x: titleX, autoAlpha: 0 },
-            { x: 0, autoAlpha: 1, duration: d("forecastTitle", 0.45) },
             t
           )
           tl.fromTo(
@@ -172,9 +163,7 @@ function Home() {
                 currentScale: 1,
                 locY: 6,
                 iconRot: 0,
-                tempX: 8,
                 cardY: 8,
-                titleX: -6,
                 periodX: 10,
                 chartY: 10,
                 durations: {
@@ -182,9 +171,7 @@ function Home() {
                   current: 0.28,
                   location: 0.18,
                   icon: 0.24,
-                  temp: 0.2,
                   stats: 0.18,
-                  forecastTitle: 0.2,
                   summarySlot: 0.18,
                   periods: 0.22,
                   chart: 0.26,
@@ -199,9 +186,7 @@ function Home() {
                 currentScale: 0.99,
                 locY: 10,
                 iconRot: -8,
-                tempX: 12,
                 cardY: 12,
-                titleX: -10,
                 periodX: 16,
                 chartY: 18,
                 durations: {
@@ -209,9 +194,7 @@ function Home() {
                   current: 0.52,
                   location: 0.32,
                   icon: 0.45,
-                  temp: 0.38,
                   stats: 0.3,
-                  forecastTitle: 0.36,
                   summarySlot: 0.32,
                   periods: 0.34,
                   chart: 0.42,
@@ -314,57 +297,60 @@ function Home() {
   })
 
   return (
-    <div
-      id="home"
-      ref={scopeRef}
-      className="home-root"
-      style={{ backgroundImage: `url(${rain})` }}
-    >
+    <div id="home" ref={scopeRef} className="home-root">
       <div className="overlay" aria-hidden />
-      <div className="home-search-wrap w-full flex justify-center z-20 mt-10 px-2 sm:px-0">
+      <div className="home-search-wrap">
         <Searchbar />
       </div>
-
       {current && forecast ? (
         <div id="weather" className="home-weather">
           <div className="home-weather-inner">
-            <div id="current" className="current-weather">
-              <div className="location-info">
-                <p className="location-text">{locationLine}</p>
-              </div>
-              <div className="main-weather">
-                <img className="main-icon" src={icon(current.weather[0].icon, '@4x')} alt="weather"/>
-                <h1 className="sm:text-3xl text-xl font-medium">{current.weather[0].description.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')}</h1>
-              </div>
+            <div className="home-current-summary-pair">
+              <div className="home-current-summary-cell">
+                <div id="current" className="current-weather">
+                  <div className="location-info">
+                    <p className="location-text">{locationLine}</p>
+                  </div>
+                  <div className="main-weather">
+                    <img className="main-icon" src={icon(current.weather[0].icon, '@4x')} alt="weather"/>
+                    <h1 className="current-weather-desc">{current.weather[0].description.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ')}</h1>
+                  </div>
 
-              <div className="stats-grid">
-                <div className="stat-card">
-                  <div className="stat-icon">🌡️</div>
-                  <div className="stat-content">
-                    <p className="stat-label">Temperature</p>
-                    <p className="stat-value">{kToF(current.main.temp)}°F</p>
+                  <div className="stats-grid">
+                    <div className="stat-card">
+                      <div className="stat-heading">
+                        <p className="stat-label">Temperature</p>
+                        <Thermostat className="stat-metric-icon" aria-hidden />
+                      </div>
+                      <p className="stat-value">{kToF(current.main.temp)}°F</p>
+                    </div>
+                    <div className="stat-card">
+                      <div className="stat-heading">
+                        <p className="stat-label">Wind</p>
+                        <Air className="stat-metric-icon" aria-hidden />
+                      </div>
+                      <p className="stat-value">{degToDir(current.wind.deg)} {Math.round(current.wind.speed)} mph</p>
+                    </div>
+                    <div className="stat-card">
+                      <div className="stat-heading">
+                        <p className="stat-label">Humidity</p>
+                        <WaterDrop className="stat-metric-icon" aria-hidden />
+                      </div>
+                      <p className="stat-value">{current.main.humidity}%</p>
+                    </div>
+                    <div className="stat-card">
+                      <div className="stat-heading">
+                        <p className="stat-label">Air Pressure</p>
+                        <Compress className="stat-metric-icon" aria-hidden />
+                      </div>
+                      <p className="stat-value">{current.main.pressure} mb</p>
+                    </div>
                   </div>
                 </div>
-                <div className="stat-card">
-                  <div className="stat-icon">💨</div>
-                  <div className="stat-content">
-                    <p className="stat-label">Wind</p>
-                    <p className="stat-value">{degToDir(current.wind.deg)} {Math.round(current.wind.speed)} mph</p>
-                  </div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-icon">💧</div>
-                  <div className="stat-content">
-                    <p className="stat-label">Humidity</p>
-                    <p className="stat-value">{current.main.humidity}%</p>
-                  </div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-icon">⏲️</div>
-                  <div className="stat-content">
-                    <p className="stat-label">Air Pressure</p>
-                    <p className="stat-value">{current.main.pressure} mb</p>
-                  </div>
+              </div>
+              <div className="home-current-summary-cell">
+                <div className="forecast-summary-block">
+                  <Summary forecast={forecast} />
                 </div>
               </div>
             </div>
@@ -375,10 +361,6 @@ function Home() {
                   {periods}
                 </div>
               </div>
-            </div>
-
-            <div className="forecast-summary-block w-full min-w-0">
-              <Summary forecast={forecast} />
             </div>
 
             <div className="chart-container">

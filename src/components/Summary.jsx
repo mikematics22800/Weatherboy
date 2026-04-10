@@ -16,9 +16,11 @@ export default function Summary({ forecast }) {
   }
 
   return (
-    <section className="forecast-summary" aria-label="Five-day forecast summary">
+    <section
+      className="forecast-summary"
+    >
       <div className="forecast-summary__text">
-        <h2 className="forecast-summary__title">5-Day Forecast Summary</h2>
+        <h2 className="forecast-summary__title">5-Day Forecast</h2>
         <hr className="my-2"/>
         <p>{text}</p>
       </div>
