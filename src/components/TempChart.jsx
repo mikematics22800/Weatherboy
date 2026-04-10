@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Context } from '../routes/Root'
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { kToF } from "../libs/conversions";
+import { kToF, dewPointFahrenheit } from "../libs/conversions";
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 Chart.defaults.color = 'white'; 
@@ -16,6 +16,10 @@ const TempChart = () => {
 
   const humidity = forecast?.list.map((period) => {
     return period.main.humidity
+  })
+
+  const dewPoints = forecast?.list.map((period) => {
+    return dewPointFahrenheit(period.main.temp, period.main.humidity)
   })
 
   const dates = forecast?.list.map((period) => {
@@ -42,6 +46,14 @@ const TempChart = () => {
         borderColor: "aqua",
         backgroundColor: "white",
         yAxisID: "y1",
+        pointRadius: 2
+      },
+      {
+        label: "Dew Point (°F)",
+        data: dewPoints,
+        borderColor: "gold",
+        backgroundColor: "white",
+        yAxisID: "y",
         pointRadius: 2
       },
     ]

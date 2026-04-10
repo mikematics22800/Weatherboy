@@ -90,11 +90,11 @@ input {
 }
 
 .stats-grid {
-  @apply flex w-full min-w-0 flex-row items-stretch justify-between flex-wrap 
+  @apply flex w-full flex-row items-stretch justify-between flex-wrap lg:px-20
 }
 
 .stat-card {
-  @apply box-border flex min-w-0 shrink items-center gap-2 p-2;
+  @apply box-border flex shrink items-center gap-2 p-2;
 }
 
 .stat-icon {
@@ -333,3 +333,6 @@ input {
   }
 }
 
+.forecast-summary__title {
+  @apply text-2xl font-medium text-white mb-2 text-center
+}

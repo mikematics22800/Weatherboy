@@ -3,6 +3,16 @@ export const kToF = (k) => {
   return f
 }
 
+export const dewPointFahrenheit = (tempK, rhPercent) => {
+  const tempC = tempK - 273.15
+  const rh = Math.min(100, Math.max(0.1, rhPercent))
+  const a = 17.27
+  const b = 237.7
+  const gamma = (a * tempC) / (b + tempC) + Math.log(rh / 100)
+  const dewC = (b * gamma) / (a - gamma)
+  return Math.round(dewC * (9 / 5) + 32)
+}
+
 export const degToDir = (deg) => {
   let dir;
   if (deg >= 348.75 || deg < 11.25) {
