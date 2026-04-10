@@ -41,19 +41,19 @@ const TempChart = () => {
         pointRadius: 2
       },
       {
-        label: "Humidity (%)",
-        data: humidity,
-        borderColor: "aqua",
-        backgroundColor: "white",
-        yAxisID: "y1",
-        pointRadius: 2
-      },
-      {
         label: "Dew Point (°F)",
         data: dewPoints,
         borderColor: "gold",
         backgroundColor: "white",
         yAxisID: "y",
+        pointRadius: 2
+      },
+      {
+        label: "Humidity (%)",
+        data: humidity,
+        borderColor: "aqua",
+        backgroundColor: "white",
+        yAxisID: "y1",
         pointRadius: 2
       },
     ]
