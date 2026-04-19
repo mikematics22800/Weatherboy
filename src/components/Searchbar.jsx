@@ -1,5 +1,5 @@
 import { useState, useContext, useRef, useCallback } from 'react'
-import { Context } from './App'
+import { Context } from "./WeatherContext"
 import { Autocomplete } from '@react-google-maps/api'
 import { Search, LocationOn } from '@mui/icons-material'
 
@@ -24,13 +24,13 @@ const Searchbar = () => {
     return (
       <div className="w-full flex justify-center">
         <div className={searchbarClass}>
-          <LocationOn className="text-blue-600 ml-4 text-xl" />
+          <LocationOn className="shrink-0 text-blue-600 ml-4 text-xl" />
           <input
             disabled
             placeholder="Initializing..."
             className="flex-1"
           />
-          <Search className="text-gray-400 ml-2 text-xl" />
+          <Search className="shrink-0 text-gray-400 text-xl" />
         </div>
       </div>
     )
@@ -50,14 +50,14 @@ const Searchbar = () => {
       className="w-full flex justify-center"
     >
       <div className={searchbarClass}>
-        <LocationOn className="text-blue-600 ml-4 text-xl" />
+        <LocationOn className="shrink-0 text-blue-600 ml-4 text-xl" />
         <input
           placeholder="Search for a city…"
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           className="flex-1"
         />
-        <Search className="text-gray-500 hover:text-blue-600 transition-colors duration-200 cursor-pointer" />
+        <Search className="shrink-0 text-xl text-gray-500 hover:text-blue-600 transition-colors duration-200 cursor-pointer" />
       </div>
     </Autocomplete>
   )

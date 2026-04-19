@@ -56,15 +56,26 @@
   }
 
   .app {
-    @apply relative isolate min-h-screen w-screen flex bg-[url('./images/rain.jpg')] bg-cover bg-center bg-no-repeat;
+    @apply relative isolate flex min-h-screen w-screen flex-col bg-cover bg-center bg-no-repeat;
+    background-image: linear-gradient(
+        to bottom,
+        rgb(15 23 42 / 0.6),
+        rgb(30 58 138 / 0.4),
+        rgb(30 64 175 / 0.6)
+      ),
+      url("./images/rain.jpg");
   }
 
-  .overlay {
-    @apply pointer-events-none fixed inset-0 z-0 bg-gradient-to-b from-blue-950/60 via-blue-900/40 to-blue-800/60;
+  nav {
+    @apply relative z-10 hidden h-20 w-full items-center justify-between bg-blue-950 px-5 lg:flex lg:px-10;
   }
 
   .searchbar {
-    @apply z-20 flex h-12 w-96 max-w-full items-center gap-3 rounded-2xl border border-white bg-white pr-4 text-base shadow-2xl outline-none backdrop-blur-sm transition-all duration-300 hover:shadow-blue-500/25 min-[481px]:max-sm:text-lg sm:h-14 sm:text-xl;
+    @apply z-20 flex h-12 w-full max-w-full min-w-0 items-center gap-3 rounded-2xl border border-white bg-white pr-4 text-base shadow-2xl outline-none backdrop-blur-sm transition-all duration-300 hover:shadow-blue-500/25 min-[481px]:max-sm:text-lg sm:h-14 sm:text-xl;
+  }
+
+  .searchbar input {
+    @apply min-w-0;
   }
 
   #loader {
@@ -80,7 +91,7 @@
   }
 
   .loading-text {
-    @apply text-base font-medium text-white min-[481px]:max-sm:text-lg sm:text-xl;
+    @apply text-xl font-medium text-white min-[481px]:max-sm:text-lg sm:text-xl;
   }
 
   .weather-overview {
@@ -148,20 +159,20 @@
   }
 
   .period-card {
-    @apply glass-surface-data flex min-w-0 flex-1 basis-[11rem] flex-col p-4 text-sm transition-all duration-300 sm:basis-52;
+    @apply glass-surface-data flex min-w-0 flex-1 basis-36 flex-col p-3 text-xs transition-all duration-300 sm:basis-52 sm:p-4 sm:text-sm;
   }
 
   .period-header {
-    @apply mb-3 flex items-center justify-between border-b border-white pb-2;
+    @apply mb-2 flex items-center justify-between border-b border-white pb-2 sm:mb-3;
   }
 
   .period-day {
-    @apply text-base font-semibold text-white;
+    @apply text-sm font-semibold text-white sm:text-base;
   }
 
   .period-time,
   .detail-label {
-    @apply text-xs font-medium text-white;
+    @apply text-[11px] font-medium leading-snug text-white sm:text-xs sm:leading-normal;
   }
 
   .period-weather {
@@ -174,11 +185,11 @@
   }
 
   .weather-desc {
-    @apply mr-2 flex-1 text-sm font-medium capitalize text-white;
+    @apply mr-2 flex-1 text-xs font-medium capitalize leading-snug text-white sm:text-sm sm:leading-normal;
   }
 
   .weather-icon {
-    @apply h-12 w-12;
+    @apply h-10 w-10 shrink-0 sm:h-12 sm:w-12;
   }
 
   .weather-details {
@@ -186,7 +197,7 @@
   }
 
   .detail-value {
-    @apply text-sm font-semibold text-white;
+    @apply text-xs font-semibold tabular-nums text-white sm:text-sm;
   }
 
   .chart-container {
@@ -194,7 +205,7 @@
   }
 
   .desktop-view {
-    @apply relative z-10 hidden h-screen min-h-0 w-full lg:flex;
+    @apply relative z-10 hidden h-[calc(100vh-5rem)] min-h-0 w-full lg:flex;
   }
 
   .interface-scroll {
@@ -215,6 +226,21 @@
 
   .mobile-interface {
     @apply absolute top-[96%] z-30 m-0 flex w-full justify-center rounded-t-3xl p-0 lg:hidden;
+  }
+
+  /* Mobile sheet background (see Cyclopedia `globals.css` `.mobile-interface` + `Interface` shell). */
+  .interface--mobile-rain {
+    @apply relative isolate w-full max-w-full overflow-hidden rounded-t-3xl bg-cover bg-fixed bg-center bg-no-repeat;
+  }
+
+  .interface--mobile-rain::after {
+    content: "";
+    @apply pointer-events-none absolute inset-0 rounded-t-3xl bg-gradient-to-b from-blue-950/60 via-blue-900/40 to-blue-800/60;
+    z-index: 0;
+  }
+
+  .interface--mobile-rain > * {
+    @apply relative z-10;
   }
 
   .map {

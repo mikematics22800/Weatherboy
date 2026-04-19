@@ -1,15 +1,18 @@
-import { createContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import gsap from "gsap"
 import { CircularProgress } from "@mui/material"
 import { useLoadScript } from "@react-google-maps/api"
 import { fetchCurrentWeather, fetchWeatherForecast, fetchReverseGeocodeRegion } from "../libs/apis"
 import Interface from "./Interface"
-import Metrics from "./Forecast"
+import Forecast from "./Forecast"
 import Map from "./Map"
-
-export const Context = createContext()
+import { Context, InterfaceLayoutContext } from "./WeatherContext"
+import umbrellaImg from "../images/umbrella.png"
 
 const GOOGLE_MAPS_LIBRARIES = ["places"]
+
+const INTERFACE_LAYOUT_DESKTOP = { mobileRainBackdrop: false, hideMapToggle: false }
+const INTERFACE_LAYOUT_MOBILE = { mobileRainBackdrop: true, hideMapToggle: true }
 
 function App() {
   const [lat, setLat] = useState(null)
@@ -18,14 +21,13 @@ function App() {
   const [forecast, setForecast] = useState(null)
   const scopeRef = useRef(null)
   const [regionLabel, setRegionLabel] = useState(null)
+  const [showMap, setShowMap] = useState(true)
 
   const { isLoaded: mapsReady } = useLoadScript({
     id: "weatherboy-google-maps",
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY ?? "",
     libraries: GOOGLE_MAPS_LIBRARIES,
   })
-
-  const value = { current, forecast, setLat, setLon, mapsReady }
 
   useEffect(() => {
     if (!current?.coord) return
@@ -61,6 +63,23 @@ function App() {
     const tail = list[list.length - 1].dt
     return `${current.id}-${cityId}-${head}-${tail}-${list.length}`
   }, [current, forecast])
+
+  const value = useMemo(
+    () => ({
+      current,
+      forecast,
+      setLat,
+      setLon,
+      mapsReady,
+      lat,
+      lon,
+      locationLine,
+      showMap,
+      setShowMap,
+      forecastCardsIntroKey,
+    }),
+    [current, forecast, mapsReady, lat, lon, locationLine, showMap, forecastCardsIntroKey]
+  )
 
   useLayoutEffect(() => {
     const root = scopeRef.current
@@ -240,45 +259,36 @@ function App() {
     }
   }, [lat, lon])
 
-  const [showMap, setShowMap] = useState(true)
-
   return (
     <Context.Provider value={value}>
       <div className="app" ref={scopeRef}>
-        <div className="overlay" aria-hidden />
         {current && forecast ? (
           <>
+            <nav>
+              <div className="flex items-center gap-2">
+                <h1 className="text-4xl text-white italic font-bold">
+                  Weatherboy
+                </h1>
+                <img src={umbrellaImg} width={40} height={40} alt="" />
+              </div>
+            </nav>
             <div className="desktop-view">
               <div className="interface-scroll">
-                <Interface
-                  current={current}
-                  locationLine={locationLine}
-                  showMap={showMap}
-                  onToggleView={() => setShowMap((prev) => !prev)}
-                />
+                <InterfaceLayoutContext.Provider value={INTERFACE_LAYOUT_DESKTOP}>
+                  <Interface />
+                </InterfaceLayoutContext.Provider>
               </div>
-              <div className="charts-container">
-                {showMap ? (
-                  <Map lat={lat} lon={lon} />
-                ) : (
-                  <Metrics forecast={forecast} introKey={forecastCardsIntroKey} />
-                )}
-              </div>
+              <>
+                {showMap ? <Map /> : <Forecast />}
+              </>
             </div>
             <div className="mobile-map">
-              {showMap ? (
-                <Map lat={lat} lon={lon} />
-              ) : (
-                <Metrics forecast={forecast} introKey={forecastCardsIntroKey} />
-              )}
+              <Map />
             </div>
             <div className="mobile-interface">
-              <Interface
-                current={current}
-                locationLine={locationLine}
-                showMap={showMap}
-                onToggleView={() => setShowMap((prev) => !prev)}
-              />
+              <InterfaceLayoutContext.Provider value={INTERFACE_LAYOUT_MOBILE}>
+                <Interface />
+              </InterfaceLayoutContext.Provider>
             </div>
           </>
         ) : (

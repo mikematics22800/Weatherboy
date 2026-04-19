@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { Context } from "./WeatherContext";
 import { MapContainer, TileLayer, useMap, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -85,7 +86,8 @@ function LocationMarker({ lat, lon }) {
   return <Marker position={position} icon={locationPinIcon} />;
 }
 
-const Map = ({ lat, lon }) => {
+const Map = () => {
+  const { lat, lon } = useContext(Context);
   const id = import.meta.env.VITE_OWM_KEY ?? import.meta.env.NEXT_PUBLIC_OWM_KEY;
 
   const [layers, setLayers] = useState(() => ({ ...DEFAULT_CLIMATE_LAYERS }));

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Context } from './App'
+import { Context } from "./WeatherContext"
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { kToF, dewPointFahrenheit } from "../libs/conversions";
@@ -86,7 +86,9 @@ const TempChart = () => {
     },
   }
   return (
+    <div className="chart-container">
       <Line data={data} options={options}/>
+    </div>
   )
 }
 

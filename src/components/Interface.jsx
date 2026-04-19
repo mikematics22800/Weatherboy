@@ -1,15 +1,21 @@
-import Air from "@mui/icons-material/Air"
-import Thermostat from "@mui/icons-material/Thermostat"
-import WaterDrop from "@mui/icons-material/WaterDrop"
-import { Compress } from "@mui/icons-material"
+import { useContext } from "react"
 import { degToDir, dewPointFahrenheit, kToF } from "../libs/conversions"
 import Searchbar from "./Searchbar"
+import rainJpg from "../images/rain.jpg"
+import Chart from "./Chart"
+import ForecastPeriods from "./ForecastPeriods"
+import { Context, InterfaceLayoutContext } from "./WeatherContext"
 
 const icon = (weatherIcon, size) => `https://openweathermap.org/img/wn/${weatherIcon}${size}.png`
 
-const Interface = ({ current, locationLine, showMap, onToggleView }) => {
+const Interface = () => {
+  const { current, locationLine, showMap, setShowMap } = useContext(Context)
+  const { mobileRainBackdrop, hideMapToggle } = useContext(InterfaceLayoutContext)
   return (
-    <div className="interface">
+    <div
+      className={mobileRainBackdrop ? "interface interface--mobile-rain" : "interface"}
+      style={mobileRainBackdrop ? { backgroundImage: `url(${rainJpg})` } : undefined}
+    >
       <div className="drag-handle" />
       <Searchbar />
       <div className="weather-overview">
@@ -59,9 +65,17 @@ const Interface = ({ current, locationLine, showMap, onToggleView }) => {
             </div>
           </div>
         </div>
-        <button type="button" className="button" onClick={onToggleView} aria-pressed={showMap}>
-          {showMap ? "5-Day Forecast" : "Weather Map"}
-        </button>
+        {!hideMapToggle ? (
+          <button type="button" className="button" onClick={() => setShowMap((prev) => !prev)} aria-pressed={showMap}>
+            {showMap ? "5-Day Forecast" : "Weather Map"}
+          </button>
+        ) : null}
+      </div>
+      <div className="lg:hidden w-full flex flex-col gap-8">
+        <Chart />
+        <div className="flex flex-wrap gap-4">        
+          <ForecastPeriods />
+        </div>
       </div>
     </div>
   )
