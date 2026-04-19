@@ -40,10 +40,10 @@ const Interface = () => {
               <p className="stat-value">{kToF(current.main.temp)}°F</p>
             </div>
             <div className="stat-card">
-              <div className="stat-heading justify-end">
+              <div className="stat-heading">
                 <p className="stat-label">Wind</p>
               </div>
-              <p className="stat-value text-right">
+              <p className="stat-value">
                 {degToDir(current.wind.deg)} {Math.round(current.wind.speed)} mph
               </p>
             </div>
@@ -58,10 +58,10 @@ const Interface = () => {
               </p>
             </div>
             <div className="stat-card">
-              <div className="stat-heading justify-end">
+              <div className="stat-heading">
                 <p className="stat-label">Air Pressure</p>
               </div>
-              <p className="stat-value text-right">{current.main.pressure} mb</p>
+              <p className="stat-value">{current.main.pressure} mb</p>
             </div>
           </div>
         </div>

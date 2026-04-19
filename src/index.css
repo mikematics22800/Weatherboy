@@ -115,7 +115,7 @@
   }
 
   .main-weather {
-    @apply mb-10 flex flex-col items-center text-sm font-medium text-white;
+    @apply mb-8 flex flex-col items-center text-sm font-medium text-white;
   }
 
   .main-icon {
@@ -123,7 +123,7 @@
   }
 
   .stats-grid {
-    @apply grid w-full grid-cols-2 gap-x-5 gap-y-4;
+    @apply flex flex-wrap gap-4 gap-8 justify-center;
   }
 
   .stat-card {
