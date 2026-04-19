@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Context } from '../routes/Root'
+import { Context } from './App'
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { kToF, dewPointFahrenheit } from "../libs/conversions";
@@ -14,8 +14,8 @@ const TempChart = () => {
     return kToF(period.main.temp)
   })
 
-  const humidity = forecast?.list.map((period) => {
-    return period.main.humidity
+  const pressure = forecast?.list.map((period) => {
+    return period.main.pressure
   })
 
   const dewPoints = forecast?.list.map((period) => {
@@ -49,8 +49,8 @@ const TempChart = () => {
         pointRadius: 2
       },
       {
-        label: "Humidity (%)",
-        data: humidity,
+        label: "Air Pressure (mb)",
+        data: pressure,
         borderColor: "aqua",
         backgroundColor: "white",
         yAxisID: "y1",
@@ -86,7 +86,7 @@ const TempChart = () => {
     },
   }
   return (
-    <Line data={data} options={options}/>
+      <Line data={data} options={options}/>
   )
 }
 

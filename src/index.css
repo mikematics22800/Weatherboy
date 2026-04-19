@@ -2,9 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/*
- * Typography: compact below sm (640px); tighter below 480px via max-[480px] / min-[481px]:max-sm:
- */
+/* Typography: compact below sm; tighter below 480px via min-[481px]:max-sm / max-[480px] */
 
 @layer base {
   body::-webkit-scrollbar {
@@ -20,22 +18,49 @@
   }
 }
 
-@layer components {
-  .glass-surface {
-    @apply rounded-3xl border border-white bg-gradient-to-br from-blue-800/80 to-blue-700/80 shadow-xl;
+@media (min-width: 1024px) {
+  :is(.interface-scroll, .charts-container) {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(100 116 139) rgb(15 23 42 / 0.35);
   }
 
-  #home,
-  .home-root {
-    @apply relative flex min-h-screen w-full flex-col gap-6 bg-[url('./images/rain.jpg')] bg-cover bg-center bg-no-repeat px-4 pt-6 pb-[max(7rem,env(safe-area-inset-bottom))] sm:gap-8 sm:bg-fixed sm:px-8 sm:pt-8 sm:pb-8 md:px-16;
+  :is(.interface-scroll, .charts-container)::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  :is(.interface-scroll, .charts-container)::-webkit-scrollbar-track {
+    margin-block: 4px;
+    background: rgb(15 23 42 / 0.35);
+    border-radius: 9999px;
+  }
+
+  :is(.interface-scroll, .charts-container)::-webkit-scrollbar-thumb {
+    background: rgb(100 116 139 / 0.85);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  :is(.interface-scroll, .charts-container)::-webkit-scrollbar-thumb:hover {
+    background: rgb(148 163 184 / 0.9);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+}
+
+@layer components {
+
+  .glass-surface-data {
+    @apply rounded-3xl border border-white bg-gradient-to-br from-blue-800/90 to-blue-700/90 shadow-xl;
+  }
+
+  .app {
+    @apply relative isolate min-h-screen w-screen flex bg-[url('./images/rain.jpg')] bg-cover bg-center bg-no-repeat;
   }
 
   .overlay {
-    @apply fixed left-0 top-0 h-screen w-screen bg-gradient-to-b from-blue-950/60 via-blue-900/40 to-blue-800/60;
-  }
-
-  .home-search-wrap {
-    @apply z-20 flex w-full justify-center px-2 sm:px-0;
+    @apply pointer-events-none fixed inset-0 z-0 bg-gradient-to-b from-blue-950/60 via-blue-900/40 to-blue-800/60;
   }
 
   .searchbar {
@@ -58,32 +83,16 @@
     @apply text-base font-medium text-white min-[481px]:max-sm:text-lg sm:text-xl;
   }
 
-  .home-weather {
-    @apply z-10 flex w-full flex-col items-center p-2 sm:p-4;
-  }
-
-  .home-weather-inner {
-    @apply flex w-full max-w-[1200px] min-w-0 flex-col items-stretch gap-8 lg:gap-10;
-  }
-
-  .home-current-summary-pair {
-    @apply grid w-full grid-cols-1 items-stretch gap-10 lg:grid-cols-2;
-  }
-
-  .home-current-summary-cell {
-    @apply flex min-h-0 min-w-0 flex-col;
-  }
-
-  .forecast-summary-block {
-    @apply flex h-full min-h-0 w-full min-w-0 flex-col;
+  .weather-overview {
+    @apply glass-surface-data flex h-full min-h-0 w-full max-w-full flex-1 flex-col gap-8 p-8 font-medium text-white;
   }
 
   .current-weather {
-    @apply glass-surface flex h-full min-h-0 w-full max-w-full flex-1 flex-col items-center font-medium text-white animate-[fadeInUp_0.6s_ease-out] p-10;
+    @apply flex w-full max-w-full flex-col items-center font-medium text-white;
   }
 
   .current-weather-desc {
-    @apply text-xl font-medium text-white sm:text-2xl;
+    @apply text-lg font-medium text-white sm:text-xl;
   }
 
   .location-info {
@@ -91,11 +100,11 @@
   }
 
   .location-text {
-    @apply text-xl font-semibold text-white sm:text-2xl
+    @apply text-lg font-semibold text-white sm:text-xl;
   }
 
   .main-weather {
-    @apply flex flex-col items-center mb-10;
+    @apply mb-10 flex flex-col items-center text-sm font-medium text-white;
   }
 
   .main-icon {
@@ -103,7 +112,7 @@
   }
 
   .stats-grid {
-    @apply flex flex-row flex-wrap justify-between w-full gap-5;
+    @apply grid w-full grid-cols-2 gap-x-5 gap-y-4;
   }
 
   .stat-card {
@@ -115,31 +124,19 @@
   }
 
   .stat-metric-icon {
-    @apply shrink-0 text-xl leading-none;
+    @apply shrink-0 text-xl leading-none text-white;
   }
 
   .stat-label {
-    @apply min-w-0 truncate text-sm font-medium;
+    @apply min-w-0 truncate font-medium text-white;
   }
 
   .stat-value {
-    @apply pl-0 text-base font-semibold tabular-nums;
+    @apply pl-0 text-base font-semibold tabular-nums text-white;
   }
 
   .forecast-section {
-    @apply flex min-w-0 w-full flex-col text-white;
-  }
-
-  .forecast-summary__title {
-    @apply mb-2 text-center font-medium text-white text-lg min-[481px]:max-sm:text-xl sm:text-2xl;
-  }
-
-  .forecast-summary {
-    @apply flex h-full min-h-0 min-w-0 flex-1 flex-col text-base font-medium leading-relaxed text-white;
-  }
-
-  .forecast-summary__text {
-    @apply glass-surface flex min-h-0 flex-1 flex-col p-6 text-white sm:p-8;
+    @apply flex w-full min-w-0 flex-col text-white;
   }
 
   .forecast-container {
@@ -147,48 +144,11 @@
   }
 
   .forecast-scroll {
-    @apply flex touch-pan-x gap-3 overflow-x-auto scroll-smooth pb-4 snap-x snap-proximity sm:gap-4;
-    --forecast-fade: 1.25rem;
-    --forecast-edge-pad: 1.75rem;
-    padding-inline: var(--forecast-edge-pad);
-    scroll-padding-inline: var(--forecast-edge-pad);
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-    -webkit-mask-image: linear-gradient(
-      to right,
-      transparent,
-      #000 var(--forecast-fade),
-      #000 calc(100% - var(--forecast-fade)),
-      transparent
-    );
-    mask-image: linear-gradient(
-      to right,
-      transparent,
-      #000 var(--forecast-fade),
-      #000 calc(100% - var(--forecast-fade)),
-      transparent
-    );
-  }
-
-  .forecast-scroll::-webkit-scrollbar {
-    height: 8px;
-  }
-
-  .forecast-scroll::-webkit-scrollbar-track {
-    @apply bg-transparent;
-  }
-
-  .forecast-scroll::-webkit-scrollbar-thumb {
-    @apply rounded;
-    background: rgba(255, 255, 255, 0.3);
-  }
-
-  .forecast-scroll::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
+    @apply flex w-full min-w-0 flex-wrap gap-3 pb-4 sm:gap-4;
   }
 
   .period-card {
-    @apply glass-surface flex w-48 flex-shrink-0 flex-col p-4 text-sm transition-all duration-300;
+    @apply glass-surface-data flex min-w-0 flex-1 basis-[11rem] flex-col p-4 text-sm transition-all duration-300 sm:basis-52;
   }
 
   .period-header {
@@ -199,7 +159,8 @@
     @apply text-base font-semibold text-white;
   }
 
-  .period-time {
+  .period-time,
+  .detail-label {
     @apply text-xs font-medium text-white;
   }
 
@@ -207,7 +168,8 @@
     @apply flex flex-col gap-2;
   }
 
-  .weather-main {
+  .weather-main,
+  .detail-row {
     @apply flex items-center justify-between;
   }
 
@@ -223,36 +185,65 @@
     @apply space-y-1;
   }
 
-  .detail-row {
-    @apply flex items-center justify-between;
-  }
-
-  .detail-label {
-    @apply text-xs font-medium text-white;
-  }
-
   .detail-value {
     @apply text-sm font-semibold text-white;
   }
 
   .chart-container {
-    @apply glass-surface h-72 min-h-0 w-full min-w-0 p-5 transition-shadow duration-300 hover:shadow-2xl sm:h-80 md:h-96;
+    @apply glass-surface-data h-96 min-h-0 w-full min-w-0 p-4 transition-shadow duration-300 hover:shadow-2xl;
   }
-}
 
-@media (max-width: 639px) {
-  .forecast-scroll {
-    -webkit-overflow-scrolling: touch;
+  .desktop-view {
+    @apply relative z-10 hidden h-screen min-h-0 w-full lg:flex;
   }
-}
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+  .interface-scroll {
+    @apply m-0 w-full min-w-96 p-0 lg:w-1/4 lg:min-h-0 lg:shrink-0 lg:overflow-y-auto;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .interface {
+    @apply m-0 flex h-fit w-full flex-col items-center gap-8 overflow-x-hidden p-4 lg:p-8;
+  }
+
+  .charts-container {
+    @apply m-0 flex w-full flex-col overflow-auto p-0;
+  }
+
+  .mobile-map {
+    @apply fixed inset-0 z-[5] m-0 w-full lg:hidden;
+  }
+
+  .mobile-interface {
+    @apply absolute top-[96%] z-30 m-0 flex w-full justify-center rounded-t-3xl p-0 lg:hidden;
+  }
+
+  .map {
+    @apply relative m-0 h-full min-h-0 w-full;
+  }
+
+  .map .leaflet-container {
+    @apply m-0;
+  }
+
+  .map .map-location-marker {
+    background: transparent !important;
+    border: none !important;
+  }
+
+  .map-controls-container {
+    @apply absolute right-4 top-4 z-[9999] flex flex-row items-start gap-4;
+  }
+
+  .button {
+    @apply inline-flex w-full max-w-sm cursor-pointer select-none items-center justify-center gap-2 rounded-3xl border border-white/90 bg-purple-700 px-6 py-2.5 text-sm font-semibold tracking-wide text-white shadow-xl transition-[transform,box-shadow,background-color,border-color,filter] duration-300 ease-out;
+    @apply motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-[0_22px_48px_-12px_rgb(147_51_234_/_0.45),0_10px_22px_-8px_rgb(15_23_42_/_0.35)];
+    @apply hover:border-white hover:bg-purple-600 hover:brightness-[1.03];
+    @apply active:translate-y-0 active:scale-[0.98] active:shadow-lg active:brightness-100;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-950/60;
+    @apply aria-pressed:brightness-95 sm:min-h-11 sm:text-base;
+  }
+
+  .drag-handle {
+    @apply h-1 w-20 rounded-full bg-gray-300 lg:hidden;
   }
 }
