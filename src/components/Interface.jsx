@@ -66,9 +66,11 @@ const Interface = () => {
           </div>
         </div>
         {!hideMapToggle ? (
-          <button type="button" className="button" onClick={() => setShowMap((prev) => !prev)} aria-pressed={showMap}>
-            {showMap ? "5-Day Forecast" : "Weather Map"}
-          </button>
+          <div className="flex justify-center">
+            <button type="button" className="button" onClick={() => setShowMap((prev) => !prev)} aria-pressed={showMap}>
+              {showMap ? "5-Day Forecast" : "Weather Map"}
+            </button>
+          </div>
         ) : null}
       </div>
       <div className="lg:hidden w-full flex flex-col gap-8">

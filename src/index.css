@@ -123,7 +123,7 @@
   }
 
   .stats-grid {
-    @apply flex flex-wrap gap-4 gap-8 justify-center;
+    @apply flex flex-wrap gap-8 justify-center;
   }
 
   .stat-card {
@@ -159,7 +159,7 @@
   }
 
   .period-card {
-    @apply glass-surface-data flex min-w-0 flex-1 basis-36 flex-col p-3 text-xs transition-all duration-300 sm:basis-52 sm:p-4 sm:text-sm;
+    @apply glass-surface-data flex min-w-0 flex-1 basis-36 flex-col text-xs transition-all duration-300 sm:basis-52 p-4 sm:text-sm;
   }
 
   .period-header {
@@ -170,9 +170,12 @@
     @apply text-sm font-semibold text-white sm:text-base;
   }
 
-  .period-time,
+  .period-time {
+    @apply text-sm font-semibold text-white sm:text-base;
+  }
+
   .detail-label {
-    @apply text-[11px] font-medium leading-snug text-white sm:text-xs sm:leading-normal;
+    @apply text-xs font-medium leading-snug text-white sm:text-sm;
   }
 
   .period-weather {
