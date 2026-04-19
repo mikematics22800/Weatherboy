@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from "react"
 import gsap from "gsap"
-import TempChart from "./TempChart"
+import TempChart from "./Chart"
 import { kToF, getTime, getDay, dewPointFahrenheit } from "../libs/conversions"
 
 const icon = (weatherIcon, size) => `https://openweathermap.org/img/wn/${weatherIcon}${size}.png`

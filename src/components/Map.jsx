@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { MapContainer, TileLayer, useMap, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import ClimateLayers from "./LiveLayers";
+import ClimateLayers, { DEFAULT_CLIMATE_LAYERS } from "./Layers";
 
 const OWM_OVERLAY_TILES = [
   ["clouds", "clouds_new"],
@@ -88,13 +88,7 @@ function LocationMarker({ lat, lon }) {
 const Map = ({ lat, lon }) => {
   const id = import.meta.env.VITE_OWM_KEY ?? import.meta.env.NEXT_PUBLIC_OWM_KEY;
 
-  const [layers, setLayers] = useState({
-    clouds: true,
-    precip: true,
-    wind: true,
-    pressure: false,
-    temp: false
-  });
+  const [layers, setLayers] = useState(() => ({ ...DEFAULT_CLIMATE_LAYERS }));
 
   const initialViewRef = useRef(null);
   if (initialViewRef.current === null) {

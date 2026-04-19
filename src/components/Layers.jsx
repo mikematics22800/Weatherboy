@@ -52,6 +52,10 @@ const LAYER_ROWS = [
   { key: 'wind', label: 'Wind' },
 ];
 
+export const DEFAULT_CLIMATE_LAYERS = Object.fromEntries(
+  LAYER_ROWS.map(({ key }) => [key, true])
+);
+
 const ClimateLayers = ({ layers, setLayers }) => {
   const [open, setOpen] = useState(false);
   const openPanelRef = useRef(null);
