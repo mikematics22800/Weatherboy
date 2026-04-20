@@ -158,8 +158,12 @@
     @apply flex w-full min-w-0 flex-wrap gap-3 pb-4 sm:gap-4;
   }
 
+  .forecast-period-item {
+    @apply w-40 shrink-0 lg:w-60;
+  }
+
   .period-card {
-    @apply glass-surface-data flex min-w-0 flex-1 basis-36 flex-col text-xs transition-all duration-300 sm:basis-52 p-4 sm:text-sm;
+    @apply glass-surface-data flex h-full min-w-0 flex-col p-4 text-xs transition-all duration-300 sm:text-sm;
   }
 
   .period-header {
@@ -212,7 +216,7 @@
   }
 
   .interface-scroll {
-    @apply m-0 w-full min-w-96 p-0 lg:w-1/4 lg:min-h-0 lg:shrink-0 lg:overflow-y-auto;
+    @apply m-0 w-full min-w-96 p-0 lg:w-[36rem] lg:min-h-0 lg:shrink-0 lg:overflow-y-auto;
   }
 
   .interface {
