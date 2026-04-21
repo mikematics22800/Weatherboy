@@ -1,0 +1,1 @@
+{"name":"Weatherboy","short_name":"Weatherboy","description":"A weather app with forecast and map views.","start_url":"/Weatherboy/","display":"standalone","background_color":"#0f172a","theme_color":"#0f172a","lang":"en","scope":"/Weatherboy/","icons":[{"src":"umbrella.png","sizes":"192x192","type":"image/png"},{"src":"umbrella.png","sizes":"512x512","type":"image/png"}]}

@@ -12,8 +12,9 @@ A React + Vite weather dashboard that uses your browser location (or a fallback)
 - **Current conditions** — Temperature (°F), wind (direction + mph), dew point, pressure, and OpenWeather icons with short descriptions.
 - **Location line** — City name plus region when reverse geocoding succeeds (OpenWeather Geo 1.0).
 - **City search** — Google Maps JavaScript API **Places Autocomplete** restricted to cities; selecting a place updates coordinates and refetches weather.
-- **Map vs forecast** — Toggle between a **Leaflet** map (OpenStreetMap base + optional OWM layers: clouds, precipitation, wind, pressure, temperature) and a **5-day / 3-hour** forecast view with **Chart.js** temperature sparkline-style chart.
+- **Map vs forecast** — Toggle between a **Leaflet** map (OpenStreetMap base + optional OWM layers: clouds, precipitation, wind, pressure, temperature) and a **5-day / 3-hour** forecast view with a **Chart.js** line chart for temperature, dew point, and pressure.
 - **Motion** — [GSAP](https://greensock.com/gsap/) timelines for load and data transitions, with shorter animations when `prefers-reduced-motion: reduce` is set.
+- **Installable PWA** — Service worker registration via `vite-plugin-pwa` with manifest metadata and app icon support.
 
 ---
 
@@ -21,13 +22,14 @@ A React + Vite weather dashboard that uses your browser location (or a fallback)
 
 | Area | Choice |
 |------|--------|
-| UI | React 18, [MUI](https://mui.com/) (icons, form controls), [Emotion](https://emotion.sh/) |
+| UI | React 19, [MUI](https://mui.com/) (icons, form controls), [Emotion](https://emotion.sh/) |
 | Build | [Vite](https://vitejs.dev/) 5, `@vitejs/plugin-react` |
 | Styling | [Tailwind CSS](https://tailwindcss.com/) + `src/index.css` |
 | Maps (search) | [`@react-google-maps/api`](https://github.com/JustFlyIt/react-google-maps-api) (`useLoadScript`, `Autocomplete`, Places library) |
 | Map view | [`react-leaflet`](https://react-leaflet.js.org/) + [Leaflet](https://leafletjs.com/) |
 | Charts | [`react-chartjs-2`](https://react-chartjs-2.js.org/) |
 | Animation | [GSAP](https://greensock.com/gsap/) |
+| PWA | [`vite-plugin-pwa`](https://vite-pwa-org.netlify.app/) + `virtual:pwa-register` |
 | Weather APIs | OpenWeather **Current**, **5 Day / 3 Hour Forecast**, **Geo reverse**, **Map tiles** |
 
 The entry point is `src/main.jsx`, which mounts `src/components/App.jsx`.
@@ -118,13 +120,16 @@ Restrict your Google Maps key to your GitHub Pages origin (and `http://localhost
 ```
 src/
   components/
-    App.jsx          # Context, geolocation, weather fetch, GSAP page transitions, layout shell
-    Interface.jsx    # Search + current stats + map/forecast toggle
-    Searchbar.jsx    # Google Places Autocomplete → setLat / setLon
-    Map.jsx          # Leaflet map, OSM tiles, OWM overlay toggles
-    LiveLayers.jsx   # Overlay layer checkboxes (MUI)
-    Forecast.jsx     # 5-day cards + chart (default export used as "Metrics" in App)
-    TempChart.jsx    # Chart.js temperature series
+    App.jsx             # Context, geolocation, weather fetch, GSAP page transitions, responsive layout shell
+    WeatherContext.jsx  # Shared weather context + interface layout context
+    Interface.jsx       # Search + current stats + map/forecast toggle
+    Searchbar.jsx       # Google Places Autocomplete → setLat / setLon
+    Map.jsx             # Leaflet map, marker, OSM tiles, OWM overlay toggles
+    Layers.jsx          # Overlay layer checkboxes (MUI) for clouds/precip/temp/wind/pressure
+    Forecast.jsx        # Forecast panel with chart + forecast card list
+    ForecastPeriods.jsx # Forecast card list renderer
+    ForecastPeriod.jsx  # Individual 3-hour forecast card
+    Chart.jsx           # Chart.js weather line chart (temp, dew point, pressure)
   libs/
     apis.js          # OpenWeather fetch helpers
     conversions.js   # Units, time labels, wind direction, dew point helpers
@@ -142,6 +147,18 @@ src/
 - **Map tiles** — `https://tile.openweathermap.org/map/{layer}/{z}/{x}/{y}.png?appid=`
 
 All of the above use the same OpenWeather key where applicable.
+
+---
+
+## PWA notes
+
+- The app registers a service worker in `src/main.jsx` using:
+  - `registerSW({ immediate: true })`
+- `vite.config.js` configures the manifest (`name`, `short_name`, colors, display mode, icons) and uses:
+  - `start_url: "/Weatherboy/"`
+  - `scope: "/Weatherboy/"`
+
+When deploying to a differently named GitHub Pages project site, keep `base`, `start_url`, and `scope` aligned to avoid broken asset/service worker paths.
 
 ---
 
