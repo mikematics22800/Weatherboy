@@ -96,15 +96,11 @@
   }
 
   .loading-container {
-    @apply flex flex-col items-center gap-6 text-white;
+    @apply flex justify-center items-center gap-6 text-white bg-blue-800/50 w-screen h-screen;
   }
 
   .loading-spinner {
-    @apply text-white drop-shadow-lg;
-  }
-
-  .loading-text {
-    @apply text-xl font-medium text-white min-[481px]:max-lg:text-lg lg:text-xl;
+    @apply text-white drop-shadow-lg !size-20 sm:!size-40;
   }
 
   .weather-overview {

@@ -315,7 +315,6 @@ function App() {
         ) : (
           <div id="loader" className="loading-container">
             <CircularProgress size="5rem" className="loading-spinner" />
-            <p className="loading-text">Loading...</p>
           </div>
         )}
       </div>
