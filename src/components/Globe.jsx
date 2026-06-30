@@ -243,8 +243,8 @@ const Globe = ({ layers }) => {
     <div className="map relative">
       <div ref={containerRef} className="h-full w-full" />
       {!viewerReady && (
-        <div className="globe-loading-overlay">
-          <CircularProgress size="3rem" className="text-white" />
+        <div className="globe-loading-overlay loading-container bg-blue-800/50">
+          <CircularProgress size="5rem" className="loading-spinner" />
         </div>
       )}
     </div>
