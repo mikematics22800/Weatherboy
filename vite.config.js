@@ -8,6 +8,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['umbrella.png'],
+      workbox: {
+        globIgnores: ['**/cesium/**'],
+      },
       manifest: {
         name: 'Weatherboy',
         short_name: 'Weatherboy',

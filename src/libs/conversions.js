@@ -3,6 +3,22 @@ export const kToF = (k) => {
   return f
 }
 
+export const kToC = (k) => Math.round(k - 273.15)
+
+/** Format a Kelvin temperature as `X°F/Y°C`. */
+export const formatTempK = (k) => `${kToF(k)}°F/${kToC(k)}°C`
+
+/** Dew point in °C from temp (K) and relative humidity (%). */
+export const dewPointCelsius = (tempK, rhPercent) => {
+  const tempC = tempK - 273.15
+  const rh = Math.min(100, Math.max(0.1, rhPercent))
+  const a = 17.27
+  const b = 237.7
+  const gamma = (a * tempC) / (b + tempC) + Math.log(rh / 100)
+  const dewC = (b * gamma) / (a - gamma)
+  return Math.round(dewC)
+}
+
 export const dewPointFahrenheit = (tempK, rhPercent) => {
   const tempC = tempK - 273.15
   const rh = Math.min(100, Math.max(0.1, rhPercent))
@@ -11,6 +27,13 @@ export const dewPointFahrenheit = (tempK, rhPercent) => {
   const gamma = (a * tempC) / (b + tempC) + Math.log(rh / 100)
   const dewC = (b * gamma) / (a - gamma)
   return Math.round(dewC * (9 / 5) + 32)
+}
+
+/** Format dew point (from temp K + humidity) as `X°F/Y°C`. */
+export const formatDewPointK = (tempK, rhPercent) => {
+  const f = dewPointFahrenheit(tempK, rhPercent)
+  const c = Math.round((f - 32) * (5 / 9))
+  return `${f}°F/${c}°C`
 }
 
 export const degToDir = (deg) => {

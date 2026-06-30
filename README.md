@@ -1,185 +1,276 @@
 # Weatherboy
 
-A React + Vite weather dashboard that uses your browser location (or a fallback), [OpenWeather](https://openweathermap.org/) for current conditions and forecasts, [Google Places](https://developers.google.com/maps/documentation/places/web-service) for city search, and an interactive map with optional OpenWeather map overlays.
+A responsive weather web app with live conditions, a 5-day forecast, interactive charts, and map overlays — including a toggle between a 2D Leaflet map and a 3D Cesium globe.
 
-**Live site:** [GitHub Pages](https://mikematics22800.github.io/weatherboy) (see [Deployment](#deployment) if your fork uses a different repository name.)
+**Live demo:** [https://mikematics22800.github.io/Weatherboy/](https://mikematics22800.github.io/Weatherboy/)
+
+![Weatherboy](src/images/umbrella.png)
 
 ---
 
 ## Features
 
-- **Geolocation** — On load, requests the device position; if denied or unavailable, defaults to Washington, D.C.
-- **Current conditions** — Temperature (°F), wind (direction + mph), dew point, pressure, and OpenWeather icons with short descriptions.
-- **Location line** — City name plus region when reverse geocoding succeeds (OpenWeather Geo 1.0).
-- **City search** — Google Maps JavaScript API **Places Autocomplete** restricted to cities; selecting a place updates coordinates and refetches weather.
-- **Map vs forecast** — Toggle between a **Leaflet** map (OpenStreetMap base + optional OWM layers: clouds, precipitation, wind, pressure, temperature) and a **5-day / 3-hour** forecast view with a **Chart.js** line chart for temperature, dew point, and pressure.
-- **Motion** — [GSAP](https://greensock.com/gsap/) timelines for load and data transitions, with shorter animations when `prefers-reduced-motion: reduce` is set.
-- **Installable PWA** — Service worker registration via `vite-plugin-pwa` with manifest metadata and app icon support.
+### Current conditions
+- Detects your location via the browser Geolocation API (falls back to Washington, D.C.)
+- City search powered by Google Places Autocomplete
+- Displays temperature, wind direction/speed, dew point, and air pressure
+- Reverse geocoding for state/region labels via OpenWeatherMap
+
+### Forecast & charts
+- 5-day forecast in 3-hour intervals
+- Scrollable forecast cards with temperature, dew point, and pressure per period
+- Dual-axis line chart for temperature, dew point, and air pressure over time
+- Toggle between °F and °C on the chart
+
+### Weather map
+- **2D map** — Leaflet with OpenStreetMap base tiles
+- **3D globe** — Cesium with click-to-fly navigation
+- Toggleable OpenWeatherMap overlay layers:
+  - Air pressure
+  - Clouds
+  - Precipitation
+  - Temperature
+  - Wind
+- Location pin synced to the selected city/coordinates
+
+### UI & experience
+- Desktop layout: weather panel + map/forecast side by side
+- Mobile layout: full-screen map with a draggable bottom sheet for weather details
+- GSAP entrance animations (respects `prefers-reduced-motion`)
+- Installable **Progressive Web App** (PWA) with offline shell caching
 
 ---
 
 ## Tech stack
 
-| Area | Choice |
-|------|--------|
-| UI | React 19, [MUI](https://mui.com/) (icons, form controls), [Emotion](https://emotion.sh/) |
-| Build | [Vite](https://vitejs.dev/) 5, `@vitejs/plugin-react` |
-| Styling | [Tailwind CSS](https://tailwindcss.com/) + `src/index.css` |
-| Maps (search) | [`@react-google-maps/api`](https://github.com/JustFlyIt/react-google-maps-api) (`useLoadScript`, `Autocomplete`, Places library) |
-| Map view | [`react-leaflet`](https://react-leaflet.js.org/) + [Leaflet](https://leafletjs.com/) |
-| Charts | [`react-chartjs-2`](https://react-chartjs-2.js.org/) |
-| Animation | [GSAP](https://greensock.com/gsap/) |
-| PWA | [`vite-plugin-pwa`](https://vite-pwa-org.netlify.app/) + `virtual:pwa-register` |
-| Weather APIs | OpenWeather **Current**, **5 Day / 3 Hour Forecast**, **Geo reverse**, **Map tiles** |
-
-The entry point is `src/main.jsx`, which mounts `src/components/App.jsx`.
+| Layer | Technology |
+|-------|------------|
+| Framework | [React 19](https://react.dev/) |
+| Build tool | [Vite 5](https://vitejs.dev/) |
+| Styling | [Tailwind CSS 3](https://tailwindcss.com/), [Emotion](https://emotion.sh/) |
+| UI components | [Material UI (MUI) 5](https://mui.com/) |
+| Charts | [Chart.js 4](https://www.chartjs.org/) + [react-chartjs-2](https://react-chartjs-2.js.org/) |
+| 2D maps | [Leaflet](https://leafletjs.com/) + [react-leaflet](https://react-leaflet.js.org/) |
+| 3D globe | [CesiumJS](https://cesium.com/platform/cesiumjs/) |
+| Animations | [GSAP 3](https://gsap.com/) |
+| Weather data | [OpenWeatherMap API](https://openweathermap.org/api) |
+| Place search | [Google Maps Places API](https://developers.google.com/maps/documentation/javascript/places) |
+| PWA | [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) |
+| Deployment | [gh-pages](https://github.com/tschaub/gh-pages) → GitHub Pages |
 
 ---
 
 ## Prerequisites
 
-- **Node.js** 18+ recommended (Vite 5 aligns with current LTS).
-- Accounts / keys:
-  - [OpenWeather API key](https://openweathermap.org/api) (free tier is enough for development within rate limits).
-  - [Google Cloud](https://console.cloud.google.com/) project with **Maps JavaScript API** and **Places API** enabled, and an API key restricted appropriately for your domain(s).
-
----
-
-## Environment variables
-
-Create a `.env` file in the project root (Vite only exposes variables prefixed with `VITE_`):
-
-| Variable | Required | Purpose |
-|----------|----------|---------|
-| `VITE_OWM_KEY` | **Yes** (for real data) | OpenWeather `appid` for weather, forecast, geo reverse, and map tile layers. |
-| `VITE_GOOGLE_MAPS_API_KEY` | **Yes** (for search) | Google Maps JS API key; used by `useLoadScript` and Places Autocomplete. |
-
-Example:
-
-```env
-VITE_OWM_KEY=your_openweather_api_key
-VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
-```
-
-`Map.jsx` also accepts `NEXT_PUBLIC_OWM_KEY` as a fallback for the tile `appid` only; prefer `VITE_OWM_KEY` in Vite projects.
+- **Node.js** 18+ (20+ recommended)
+- **npm** 9+
+- API keys (free tiers available):
+  - [OpenWeatherMap API key](https://home.openweathermap.org/api_keys) — weather data and map tile overlays
+  - [Google Maps JavaScript API key](https://developers.google.com/maps/documentation/javascript/get-api-key) — city search autocomplete (enable **Places API** and **Maps JavaScript API**)
 
 ---
 
 ## Getting started
 
+### 1. Clone the repository
+
 ```bash
-git clone https://github.com/<your-username>/Weatherboy.git
+git clone https://github.com/mikematics22800/Weatherboy.git
 cd Weatherboy
+```
+
+### 2. Install dependencies
+
+```bash
 npm install
 ```
 
-Add `.env` as above, then:
+This runs a `postinstall` script that copies Cesium build assets from `node_modules` into `public/cesium/`.
+
+### 3. Configure environment variables
+
+Create a `.env` file in the project root:
+
+```env
+VITE_OWM_KEY=your_openweathermap_api_key
+VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+```
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `VITE_OWM_KEY` | Yes | OpenWeatherMap API key for current weather, forecast, reverse geocoding, and map overlays |
+| `VITE_GOOGLE_MAPS_API_KEY` | Yes | Google Maps key for Places Autocomplete in the search bar |
+
+> **Note:** Never commit `.env` to version control. Vite exposes only variables prefixed with `VITE_` to the client bundle — treat both keys as public-facing and restrict them by HTTP referrer in each provider's dashboard.
+
+### 4. Start the dev server
 
 ```bash
 npm run dev
 ```
 
-Open the URL Vite prints (usually `http://localhost:5173`). Allow location when prompted for the best first-run experience.
+Open the URL printed in the terminal (typically `http://localhost:5173`).
 
-### Scripts
+### 5. Build for production
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start Vite dev server with HMR. |
-| `npm run build` | Production build to `dist/`. |
-| `npm run preview` | Serve `dist/` locally to verify the build. |
-| `npm run lint` | ESLint on `.js` / `.jsx`. |
-| `npm run deploy` | Runs `predeploy` (`npm run build`) then publishes `dist/` with [gh-pages](https://www.npmjs.com/package/gh-pages). |
-
----
-
-## Deployment (GitHub Pages)
-
-`package.json` includes:
-
-```json
-"homepage": "https://mikematics22800.github.io/weatherboy",
-"predeploy": "npm run build",
-"deploy": "gh-pages -d dist --dotfiles -m \"Deploy: GitHub Pages\""
+```bash
+npm run build
 ```
 
-`vite.config.js` sets:
+Preview the production build locally:
 
-```js
-base: "/Weatherboy/"
-```
-
-For GitHub Pages **project sites**, `base` must match the repository path segment (case-sensitive in the URL path). If your repo is named `weatherboy` (all lowercase), set `base` to `"/weatherboy/"` and align `homepage` with `https://<user>.github.io/weatherboy/`. After adjusting, rebuild and redeploy.
-
-Restrict your Google Maps key to your GitHub Pages origin (and `http://localhost:5173` for local dev).
-
----
-
-## Project layout
-
-```
-src/
-  components/
-    App.jsx             # Context, geolocation, weather fetch, GSAP page transitions, responsive layout shell
-    WeatherContext.jsx  # Shared weather context + interface layout context
-    Interface.jsx       # Search + current stats + map/forecast toggle
-    Searchbar.jsx       # Google Places Autocomplete → setLat / setLon
-    Map.jsx             # Leaflet map, marker, OSM tiles, OWM overlay toggles
-    Layers.jsx          # Overlay layer checkboxes (MUI) for clouds/precip/temp/wind/pressure
-    Forecast.jsx        # Forecast panel with chart + forecast card list
-    ForecastPeriods.jsx # Forecast card list renderer
-    ForecastPeriod.jsx  # Individual 3-hour forecast card
-    Chart.jsx           # Chart.js weather line chart (temp, dew point, pressure)
-  libs/
-    apis.js          # OpenWeather fetch helpers
-    conversions.js   # Units, time labels, wind direction, dew point helpers
-  index.css          # Global + component-oriented styles
-  main.jsx           # React root
+```bash
+npm run preview
 ```
 
 ---
 
-## API usage summary
+## Available scripts
 
-- **Current weather** — `GET /data/2.5/weather?lat=&lon=&appid=`
-- **Forecast** — `GET /data/2.5/forecast?lat=&lon=&appid=`
-- **Reverse geocode (region)** — `GET /geo/1.0/reverse?lat=&lon=&limit=1&appid=`
-- **Map tiles** — `https://tile.openweathermap.org/map/{layer}/{z}/{x}/{y}.png?appid=`
-
-All of the above use the same OpenWeather key where applicable.
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start Vite dev server with hot reload |
+| `npm run build` | Copy Cesium assets and build to `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | Run ESLint on `.js` / `.jsx` files |
+| `npm run deploy` | Build and publish `dist/` to GitHub Pages |
 
 ---
 
-## PWA notes
+## Deployment
 
-- The app registers a service worker in `src/main.jsx` using:
-  - `registerSW({ immediate: true })`
-- `vite.config.js` configures the manifest (`name`, `short_name`, colors, display mode, icons) and uses:
-  - `start_url: "/Weatherboy/"`
-  - `scope: "/Weatherboy/"`
+The app is configured for GitHub Pages with base path `/Weatherboy/` (see `vite.config.js`).
 
-When deploying to a differently named GitHub Pages project site, keep `base`, `start_url`, and `scope` aligned to avoid broken asset/service worker paths.
+```bash
+npm run deploy
+```
+
+This runs `predeploy` (build) then pushes `dist/` to the `gh-pages` branch. Ensure your GitHub repository settings serve Pages from that branch.
+
+To deploy elsewhere, update the `base` option in `vite.config.js` and the PWA `start_url` / `scope` in the same file.
+
+---
+
+## Project structure
+
+```
+Weatherboy/
+├── index.html              # App entry HTML
+├── vite.config.js          # Vite, PWA, and base-path config
+├── scripts/
+│   └── copy-cesium.mjs     # Copies Cesium assets to public/cesium
+├── public/
+│   ├── cesium/             # Cesium workers & assets (generated on install)
+│   └── umbrella.png        # Favicon and PWA icon
+└── src/
+    ├── main.jsx            # React root + PWA service worker registration
+    ├── index.css           # Global styles and Tailwind directives
+    ├── components/
+    │   ├── App.jsx           # Root layout, geolocation, data fetching, nav
+    │   ├── Interface.jsx     # Current weather panel + mobile bottom sheet
+    │   ├── Searchbar.jsx     # Google Places city search
+    │   ├── Chart.jsx         # Temperature / dew point / pressure chart
+    │   ├── Forecast.jsx      # Desktop forecast view
+    │   ├── ForecastPeriods.jsx
+    │   ├── ForecastPeriod.jsx
+    │   ├── Map.jsx           # Leaflet map + globe toggle + layer controls
+    │   ├── Globe.jsx         # Cesium 3D globe
+    │   ├── Layers.jsx        # Climate overlay layer panel
+    │   ├── WeatherContext.jsx
+    │   └── hooks/
+    │       └── useMobileSheetDrag.js
+    ├── libs/
+    │   ├── apis.js           # OpenWeatherMap fetch helpers
+    │   ├── conversions.js    # Kelvin/°F/°C, wind direction, date formatting
+    │   ├── loadCesium.js     # Dynamic Cesium loader
+    │   ├── mapUtils.js       # Shared map utilities
+    │   └── rainMirroredPattern.js
+    └── images/
+        └── umbrella.png
+```
+
+---
+
+## How it works
+
+### Data flow
+
+1. On load, the app requests the user's coordinates via `navigator.geolocation`.
+2. Coordinates are sent to OpenWeatherMap for **current weather** (`/data/2.5/weather`) and **5-day forecast** (`/data/2.5/forecast`).
+3. A reverse geocode call (`/geo/1.0/reverse`) resolves the state/region label for the location line.
+4. Selecting a city in the search bar updates `lat` / `lon` in React context, which re-fetches weather and recenters the map.
+
+### Map overlays
+
+OpenWeatherMap tile layers are composited on top of the base map:
+
+```
+https://tile.openweathermap.org/map/{layer}/{z}/{x}/{y}.png?appid={VITE_OWM_KEY}
+```
+
+Available layers: `clouds_new`, `precip_new`, `temp_new`, `wind_new`, `pressure_new`.
+
+### Responsive layouts
+
+| Viewport | Layout |
+|----------|--------|
+| **Desktop** (`≥640px`) | Nav toggles between Weather Map and 5-Day Forecast; weather panel and map/forecast share the viewport |
+| **Mobile** (`<640px`) | Full-screen map with a draggable bottom sheet containing weather details, chart, and forecast cards |
+
+---
+
+## API reference (external)
+
+| Service | Endpoint | Used for |
+|---------|----------|----------|
+| OpenWeatherMap | `GET /data/2.5/weather` | Current conditions |
+| OpenWeatherMap | `GET /data/2.5/forecast` | 5-day / 3-hour forecast |
+| OpenWeatherMap | `GET /geo/1.0/reverse` | State/region from coordinates |
+| OpenWeatherMap | `GET /map/{layer}/{z}/{x}/{y}.png` | Map tile overlays |
+| Google Maps | Places Autocomplete | City search |
+| OpenStreetMap | `tile.openstreetmap.org` | Base map tiles |
+
+---
+
+## Browser support
+
+- Modern evergreen browsers with WebGL support (required for the Cesium globe)
+- Geolocation permission improves the default experience but is not strictly required (fallback coordinates are used on denial)
+- PWA install is supported on Chromium-based browsers and Safari (iOS 16.4+)
 
 ---
 
 ## Troubleshooting
 
-- **Blank map or build errors mentioning Leaflet** — The map is implemented with `react-leaflet` and `leaflet`. If those packages are missing from your install, add them:  
-  `npm install leaflet react-leaflet`
-- **Search stuck on "Initializing…"** — Check `VITE_GOOGLE_MAPS_API_KEY`, billing/API enablement, and HTTP referrer restrictions on the key.
-- **No weather data** — Verify `VITE_OWM_KEY` and that the OpenWeather key is active; watch the browser network tab for 401/429 responses.
-- **Wrong asset paths on GitHub Pages** — Mismatched `vite.config.js` `base` and repo name usually causes 404s on JS/CSS; fix `base`, rebuild, and redeploy.
+| Issue | Likely cause | Fix |
+|-------|--------------|-----|
+| Blank weather data | Missing or invalid `VITE_OWM_KEY` | Add key to `.env` and restart dev server |
+| Search bar stuck on "Initializing…" | Missing or invalid Google Maps key | Add `VITE_GOOGLE_MAPS_API_KEY`; enable Places + Maps JS APIs |
+| Globe does not load | Cesium assets missing | Run `npm install` or `node scripts/copy-cesium.mjs` |
+| Map overlays not visible | OWM key lacks map layer access | Verify your OpenWeatherMap plan includes map tiles |
+| Broken assets after deploy | Wrong `base` path | Ensure `base: "/Weatherboy/"` matches your GitHub repo name |
 
 ---
 
 ## Contributing
 
-Issues and pull requests are welcome. Run `npm run lint` before submitting changes.
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/my-change`)
+3. Commit your changes
+4. Push and open a pull request
+
+Please run `npm run lint` before submitting.
+
+---
+
+## License
+
+No license file is included yet. All rights reserved by the repository owner unless stated otherwise.
 
 ---
 
 ## Acknowledgments
 
-- Weather data and map tiles: [OpenWeather](https://openweathermap.org/)
-- Basemap tiles: [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors
-- Search: [Google Maps Platform](https://developers.google.com/maps)
+- Weather data and map tiles by [OpenWeatherMap](https://openweathermap.org/)
+- Base map tiles © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors
+- 3D globe powered by [CesiumJS](https://cesium.com/)

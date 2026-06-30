@@ -56,18 +56,31 @@
   }
 
   .app {
-    @apply relative isolate flex min-h-screen w-screen flex-col bg-cover bg-center bg-no-repeat;
-    background-image: linear-gradient(
-        to bottom,
-        rgb(15 23 42 / 0.6),
-        rgb(30 58 138 / 0.4),
-        rgb(30 64 175 / 0.6)
-      ),
-      url("./images/rain.jpg");
+    @apply relative isolate flex min-h-screen w-screen flex-col;
+    background-image: var(--rain-bg, url("./images/rain.jpg"));
+    background-size: 100vw auto;
+    background-repeat: repeat-y;
+    background-position: top center;
   }
 
   nav {
     @apply relative z-10 hidden h-20 w-full items-center justify-between bg-blue-950 px-5 lg:flex lg:px-10;
+  }
+
+  .nav-buttons {
+    @apply flex h-10 items-center overflow-hidden rounded-xl border border-white bg-purple-700;
+  }
+
+  .nav-button {
+    @apply flex h-full items-center justify-center px-5 text-sm font-bold text-white transition-colors duration-200 lg:text-base;
+  }
+
+  .nav-button + .nav-button {
+    @apply border-l border-white/30;
+  }
+
+  .nav-button--selected {
+    @apply bg-white text-purple-700;
   }
 
   .searchbar {
@@ -95,7 +108,7 @@
   }
 
   .weather-overview {
-    @apply glass-surface-data flex h-full min-h-0 w-full max-w-full flex-1 flex-col gap-8 p-8 font-medium text-white;
+    @apply glass-surface-data flex h-full min-h-0 w-full max-w-full flex-1 flex-col gap-8 p-8 font-medium text-white ;
   }
 
   .current-weather {
@@ -123,7 +136,7 @@
   }
 
   .stats-grid {
-    @apply flex flex-wrap gap-8 justify-center;
+    @apply mx-auto grid w-fit grid-cols-2 gap-x-20 gap-y-4;
   }
 
   .stat-card {
@@ -131,11 +144,11 @@
   }
 
   .stat-heading {
-    @apply flex w-full min-w-0 flex-row items-center justify-start gap-2;
+    @apply flex w-full min-w-0 flex-row items-center justify-start gap-1;
   }
 
   .stat-metric-icon {
-    @apply shrink-0 text-xl leading-none text-white;
+    @apply shrink-0 text-lg leading-none text-white;
   }
 
   .stat-label {
@@ -155,11 +168,11 @@
   }
 
   .forecast-scroll {
-    @apply flex w-full min-w-0 flex-wrap gap-3 pb-4 lg:gap-4;
+    @apply grid w-full min-w-0 grid-cols-2 gap-3 pb-4 lg:grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] lg:gap-4;
   }
 
   .forecast-period-item {
-    @apply w-40 shrink-0 lg:w-60;
+    @apply min-w-0;
   }
 
   .period-card {
@@ -208,7 +221,23 @@
   }
 
   .chart-container {
-    @apply glass-surface-data h-96 min-h-0 w-full min-w-0 p-4 transition-shadow duration-300 hover:shadow-2xl;
+    @apply glass-surface-data flex h-96 min-h-0 w-full min-w-0 flex-col gap-3 p-4 transition-shadow duration-300 hover:shadow-2xl;
+  }
+
+  .chart-toolbar {
+    @apply flex shrink-0 justify-start;
+  }
+
+  .chart-unit-toggle {
+    @apply h-8;
+  }
+
+  .chart-unit-toggle .nav-button {
+    @apply px-3 text-xs lg:text-sm;
+  }
+
+  .chart-canvas {
+    @apply relative min-h-0 flex-1;
   }
 
   .desktop-view {
@@ -216,34 +245,92 @@
   }
 
   .interface-scroll {
-    @apply m-0 w-full min-w-96 p-0 lg:w-[36rem] lg:min-h-0 lg:shrink-0 lg:overflow-y-auto;
+    @apply absolute inset-x-0 bottom-0 z-20 flex max-h-[min(92vh,92vh)] w-full justify-center overflow-y-auto overscroll-contain rounded-t-3xl;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    @apply lg:relative lg:inset-x-auto lg:bottom-auto lg:z-auto lg:max-h-none lg:w-[36rem] lg:min-h-0 lg:shrink-0 lg:overflow-y-auto lg:rounded-none lg:pb-0;
+  }
+
+  .interface-panel {
+    @apply h-full min-h-0 w-full;
   }
 
   .interface {
-    @apply m-0 flex h-fit w-full flex-col items-center gap-8 overflow-x-hidden p-4 lg:p-8;
+    @apply flex h-fit w-full flex-col items-center gap-2 overflow-x-hidden lg:gap-8 lg:p-8;
   }
 
   .charts-container {
     @apply m-0 flex w-full flex-col overflow-auto p-0;
   }
 
-  .mobile-map {
-    @apply fixed inset-0 z-[5] m-0 w-full lg:hidden;
+  .mobile-view {
+    @apply relative flex min-h-[100vh] w-full flex-col overflow-hidden lg:hidden;
   }
 
-  .mobile-interface {
-    @apply absolute top-[96%] z-30 m-0 flex w-full justify-center rounded-t-3xl p-0 lg:hidden;
+  .mobile-view .mobile-map {
+    @apply fixed inset-0 z-0 h-[100vh] w-full;
+  }
+
+  .mobile-view .mobile-map .map {
+    @apply h-full w-full;
+  }
+
+  .mobile-view .interface-sheet {
+    @apply fixed inset-x-0 top-0 z-20 h-[100dvh] w-full overflow-hidden rounded-t-3xl;
+    transition: border-radius 0.2s ease;
+  }
+
+  .mobile-view .interface-sheet--expanded {
+    @apply rounded-t-none;
+  }
+
+  .mobile-view .interface-panel {
+    @apply flex h-full min-h-0 flex-col;
+  }
+
+  .mobile-view .interface-scroll {
+    @apply relative inset-x-auto bottom-auto z-auto min-h-0 max-h-none flex-1 overflow-y-auto overscroll-contain rounded-none pb-0;
+  }
+
+  .mobile-view .interface {
+    @apply gap-5 p-5 lg:p-10;
+  }
+
+  .mobile-view .stat-label,
+  .mobile-view .stat-value {
+    @apply text-xs lg:text-base;
+  }
+
+  .drag-handle-container {
+    @apply flex w-full shrink-0 cursor-grab touch-none select-none justify-center py-3 active:cursor-grabbing lg:hidden bg-blue-800;
+  }
+
+  .drag-handle-container--rain .drag-handle {
+    @apply relative z-10;
+  }
+
+  .mobile-view .interface-sheet--expanded .drag-handle-container--rain {
+    @apply rounded-t-none;
+  }
+
+  .mobile-view .interface--mobile-rain {
+    @apply rounded-t-none;
+  }
+
+  .mobile-view .interface-sheet--expanded .interface--mobile-rain {
+    @apply rounded-t-none;
+  }
+
+  .drag-handle {
+    @apply pointer-events-none h-1 w-20 shrink-0 rounded-full bg-gray-300 lg:hidden;
   }
 
   /* Mobile sheet background (see Cyclopedia `globals.css` `.mobile-interface` + `Interface` shell). */
   .interface--mobile-rain {
-    @apply relative isolate w-full max-w-full overflow-hidden rounded-t-3xl bg-cover bg-fixed bg-center bg-no-repeat;
-  }
-
-  .interface--mobile-rain::after {
-    content: "";
-    @apply pointer-events-none absolute inset-0 rounded-t-3xl bg-gradient-to-b from-blue-950/60 via-blue-900/40 to-blue-800/60;
-    z-index: 0;
+    @apply relative isolate w-screen max-w-full overflow-hidden rounded-t-3xl;
+    background-image: var(--rain-bg, url("./images/rain.jpg"));
+    background-size: 100vw auto;
+    background-repeat: repeat-y;
+    background-position: top center;
   }
 
   .interface--mobile-rain > * {
@@ -267,6 +354,39 @@
     @apply absolute right-4 top-4 z-[9999] flex flex-row items-start gap-4;
   }
 
+  .cesium-credit-hidden {
+    display: none !important;
+  }
+
+  .globe-loading-overlay {
+    @apply absolute inset-0 z-[500] flex items-center justify-center bg-slate-950/40 backdrop-blur-sm;
+  }
+
+  .globe-popup {
+    @apply absolute z-[1000];
+    transform: translate(-50%, calc(-100% - 12px));
+  }
+
+  .globe-popup-close {
+    @apply absolute top-1 right-1 z-[1] h-5 w-5 cursor-pointer border-0 bg-transparent p-0 text-base font-bold leading-none text-white/90;
+  }
+
+  .globe-popup-close:hover {
+    @apply text-white;
+  }
+
+  .popup-panel {
+    @apply inline-flex flex-col gap-1 rounded-xl border border-white bg-black p-4 font-semibold text-white;
+  }
+
+  .popup-panel h1 {
+    @apply mb-1 mt-2 border-b border-white pb-1 text-sm text-white;
+  }
+
+  .popup-panel ul {
+    @apply m-0 list-none p-0;
+  }
+
   .button {
     @apply inline-flex w-full max-w-sm cursor-pointer select-none items-center justify-center gap-2 rounded-3xl border border-white/90 bg-purple-700 px-6 py-2.5 text-sm font-semibold tracking-wide text-white shadow-xl transition-[transform,box-shadow,background-color,border-color,filter] duration-300 ease-out;
     @apply motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-[0_22px_48px_-12px_rgb(147_51_234_/_0.45),0_10px_22px_-8px_rgb(15_23_42_/_0.35)];
@@ -274,9 +394,5 @@
     @apply active:translate-y-0 active:scale-[0.98] active:shadow-lg active:brightness-100;
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-950/60;
     @apply aria-pressed:brightness-95 lg:min-h-11 lg:text-base;
-  }
-
-  .drag-handle {
-    @apply h-1 w-20 rounded-full bg-gray-300 lg:hidden;
   }
 }

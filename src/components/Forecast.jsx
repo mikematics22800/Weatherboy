@@ -55,11 +55,9 @@ const Forecast = () => {
       <div className="p-4 sm:p-8 flex flex-col gap-8">
         <Chart />
         <div id="forecast" className="forecast-section">
-          <div className="forecast-container">
-            <div className="forecast-scroll" ref={forecastScrollRef}>
-              <ForecastPeriods />
+            <div className="forecast-container">
+              <ForecastPeriods ref={forecastScrollRef} />
             </div>
-          </div>
         </div>
       </div>
     </div>

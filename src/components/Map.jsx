@@ -1,11 +1,15 @@
 'use client';
 
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { IconButton, Tooltip } from "@mui/material";
+import MapIcon from "@mui/icons-material/Map";
+import PublicIcon from "@mui/icons-material/Public";
 import { Context } from "./WeatherContext";
 import { MapContainer, TileLayer, useMap, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import ClimateLayers, { DEFAULT_CLIMATE_LAYERS } from "./Layers";
+import Globe from "./Globe";
 
 const OWM_OVERLAY_TILES = [
   ["clouds", "clouds_new"],
@@ -16,6 +20,11 @@ const OWM_OVERLAY_TILES = [
 ];
 
 const CITY_FOCUS_ZOOM = 11;
+
+const mapButtonClass =
+  "inline-flex flex-col gap-2 rounded-xl border border-white/15 bg-slate-950/75 p-3 font-bold text-white " +
+  "backdrop-blur-md transition-all duration-300 ease-smooth w-max max-w-[min(18rem,calc(100vw-2rem))] " +
+  "hover:border-white/25 cursor-pointer";
 
 const locationPinIcon = L.divIcon({
   className: "map-location-marker",
@@ -86,11 +95,74 @@ function LocationMarker({ lat, lon }) {
   return <Marker position={position} icon={locationPinIcon} />;
 }
 
+function GlobeToggle({ globe, setGlobe }) {
+  const toggleGlobe = () => setGlobe((prev) => !prev);
+
+  return (
+    <Tooltip title={globe ? "Map" : "Globe"} placement="bottom" arrow>
+      <div
+        className={mapButtonClass}
+        onClick={toggleGlobe}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleGlobe();
+          }
+        }}
+      >
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleGlobe();
+          }}
+          sx={{ p: 0, "&:hover": { backgroundColor: "rgba(255,255,255,0.08)" } }}
+        >
+          {!globe ? (
+            <PublicIcon className="!text-2xl text-white" />
+          ) : (
+            <MapIcon className="!text-2xl text-white" />
+          )}
+        </IconButton>
+      </div>
+    </Tooltip>
+  );
+}
+
+function LeafletMap({ layers, lat, lon, mapCenter, mapZoom, owmKey }) {
+  return (
+    <MapContainer
+      className="h-full w-full"
+      maxBounds={[[90, 180], [-90, -180]]}
+      center={mapCenter}
+      maxZoom={15}
+      minZoom={3}
+      zoom={mapZoom}
+    >
+      <MapViewSync lat={lat} lon={lon} />
+      <LocationMarker lat={lat} lon={lon} />
+      <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+      {OWM_OVERLAY_TILES.map(
+        ([stateKey, tileId]) =>
+          layers[stateKey] && (
+            <TileLayer
+              key={stateKey}
+              url={`https://tile.openweathermap.org/map/${tileId}/{z}/{x}/{y}.png?appid=${owmKey}`}
+            />
+          )
+      )}
+    </MapContainer>
+  );
+}
+
 const Map = () => {
   const { lat, lon } = useContext(Context);
-  const id = import.meta.env.VITE_OWM_KEY ?? import.meta.env.NEXT_PUBLIC_OWM_KEY;
+  const owmKey = import.meta.env.VITE_OWM_KEY ?? import.meta.env.NEXT_PUBLIC_OWM_KEY;
 
   const [layers, setLayers] = useState(() => ({ ...DEFAULT_CLIMATE_LAYERS }));
+  const [globe, setGlobe] = useState(false);
 
   const initialViewRef = useRef(null);
   if (initialViewRef.current === null) {
@@ -106,30 +178,21 @@ const Map = () => {
     <div className="map">
       <div className="map-controls-container">
         <ClimateLayers layers={layers} setLayers={setLayers} />
+        <GlobeToggle globe={globe} setGlobe={setGlobe} />
       </div>
 
-      <MapContainer
-        className="h-full w-full"
-        maxBounds={[[90, 180], [-90, -180]]}
-        center={mapCenter}
-        maxZoom={15}
-        minZoom={3}
-        zoom={mapZoom}
-      >
-        <MapViewSync lat={lat} lon={lon} />
-        <LocationMarker lat={lat} lon={lon} />
-        <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
-
-        {OWM_OVERLAY_TILES.map(
-          ([stateKey, tileId]) =>
-            layers[stateKey] && (
-              <TileLayer
-                key={stateKey}
-                url={`https://tile.openweathermap.org/map/${tileId}/{z}/{x}/{y}.png?appid=${id}`}
-              />
-            )
-        )}
-      </MapContainer>
+      {globe ? (
+        <Globe layers={layers} />
+      ) : (
+        <LeafletMap
+          layers={layers}
+          lat={lat}
+          lon={lon}
+          mapCenter={mapCenter}
+          mapZoom={mapZoom}
+          owmKey={owmKey}
+        />
+      )}
     </div>
   );
 };

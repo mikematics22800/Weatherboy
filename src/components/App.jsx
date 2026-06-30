@@ -7,12 +7,13 @@ import Interface from "./Interface"
 import Forecast from "./Forecast"
 import Map from "./Map"
 import { Context, InterfaceLayoutContext } from "./WeatherContext"
+import { ensureRainMirroredPattern } from "../libs/rainMirroredPattern"
 import umbrellaImg from "../images/umbrella.png"
 
 const GOOGLE_MAPS_LIBRARIES = ["places"]
 
-const INTERFACE_LAYOUT_DESKTOP = { mobileRainBackdrop: false, hideMapToggle: false }
-const INTERFACE_LAYOUT_MOBILE = { mobileRainBackdrop: true, hideMapToggle: true }
+const INTERFACE_LAYOUT_DESKTOP = { mobileRainBackdrop: false, mobileSheet: false }
+const INTERFACE_LAYOUT_MOBILE = { mobileRainBackdrop: true, mobileSheet: true }
 
 function App() {
   const [lat, setLat] = useState(null)
@@ -28,6 +29,12 @@ function App() {
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY ?? "",
     libraries: GOOGLE_MAPS_LIBRARIES,
   })
+
+  useEffect(() => {
+    ensureRainMirroredPattern().then((url) => {
+      document.documentElement.style.setProperty("--rain-bg", `url("${url}")`)
+    })
+  }, [])
 
   useEffect(() => {
     if (!current?.coord) return
@@ -264,28 +271,42 @@ function App() {
       <div className="app" ref={scopeRef}>
         {current && forecast ? (
           <>
-            <nav>
+            <nav aria-label="Site header">
               <div className="flex items-center gap-2">
                 <h1 className="text-4xl text-white italic font-bold">
                   Weatherboy
                 </h1>
                 <img src={umbrellaImg} width={40} height={40} alt="" />
               </div>
+              <div className="nav-buttons shrink-0">
+                <button
+                  type="button"
+                  className={`font-bold nav-button${showMap ? " nav-button--selected" : ""}`}
+                  onClick={() => setShowMap(true)}
+                  aria-pressed={showMap}
+                >
+                  Weather Map
+                </button>
+                <button
+                  type="button"
+                  className={`font-bold nav-button${!showMap ? " nav-button--selected" : ""}`}
+                  onClick={() => setShowMap(false)}
+                  aria-pressed={!showMap}
+                >
+                  5-Day Forecast
+                </button>
+              </div>
             </nav>
             <div className="desktop-view">
-              <div className="interface-scroll">
-                <InterfaceLayoutContext.Provider value={INTERFACE_LAYOUT_DESKTOP}>
-                  <Interface />
-                </InterfaceLayoutContext.Provider>
+              <InterfaceLayoutContext.Provider value={INTERFACE_LAYOUT_DESKTOP}>
+                <Interface />
+              </InterfaceLayoutContext.Provider>
+              {showMap ? <Map /> : <Forecast />}
+            </div>
+            <div className="mobile-view">
+              <div className="mobile-map">
+                <Map />
               </div>
-              <>
-                {showMap ? <Map /> : <Forecast />}
-              </>
-            </div>
-            <div className="mobile-map">
-              <Map />
-            </div>
-            <div className="mobile-interface">
               <InterfaceLayoutContext.Provider value={INTERFACE_LAYOUT_MOBILE}>
                 <Interface />
               </InterfaceLayoutContext.Provider>

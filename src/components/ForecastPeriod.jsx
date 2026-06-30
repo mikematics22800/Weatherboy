@@ -1,4 +1,4 @@
-import { kToF, getTime, getDay, dewPointFahrenheit } from "../libs/conversions"
+import { formatDewPointK, formatTempK, getTime, getDay } from "../libs/conversions"
 
 const icon = (weatherIcon, size) => `https://openweathermap.org/img/wn/${weatherIcon}${size}.png`
 
@@ -26,12 +26,12 @@ const ForecastPeriod = ({ period }) => {
         <div className="weather-details">
           <div className="detail-row">
             <span className="detail-label">Temperature</span>
-            <span className="detail-value">{kToF(period.main.temp)}°F</span>
+            <span className="detail-value">{formatTempK(period.main.temp)}</span>
           </div>
           <div className="detail-row">
             <span className="detail-label">Dew Point</span>
             <span className="detail-value">
-              {dewPointFahrenheit(period.main.temp, period.main.humidity)}°F
+              {formatDewPointK(period.main.temp, period.main.humidity)}
             </span>
           </div>
           <div className="detail-row">
