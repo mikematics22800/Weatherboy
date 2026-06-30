@@ -8,7 +8,11 @@ import { Context } from "./WeatherContext";
 import { MapContainer, TileLayer, useMap, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import ClimateLayers, { DEFAULT_CLIMATE_LAYERS } from "./Layers";
+import ClimateLayers, {
+  DEFAULT_CLIMATE_LAYERS,
+  mapButtonClass,
+  mapIconButtonSx,
+} from "./Layers";
 import Globe from "./Globe";
 
 const OWM_OVERLAY_TILES = [
@@ -20,11 +24,6 @@ const OWM_OVERLAY_TILES = [
 ];
 
 const CITY_FOCUS_ZOOM = 11;
-
-const mapButtonClass =
-  "inline-flex flex-col gap-2 rounded-xl border border-white/15 bg-slate-950/75 p-3 font-bold text-white " +
-  "backdrop-blur-md transition-all duration-300 ease-smooth w-max max-w-[min(18rem,calc(100vw-2rem))] " +
-  "hover:border-white/25 cursor-pointer";
 
 const locationPinIcon = L.divIcon({
   className: "map-location-marker",
@@ -117,7 +116,7 @@ function GlobeToggle({ globe, setGlobe }) {
             e.stopPropagation();
             toggleGlobe();
           }}
-          sx={{ p: 0, "&:hover": { backgroundColor: "rgba(255,255,255,0.08)" } }}
+          sx={mapIconButtonSx}
         >
           {!globe ? (
             <PublicIcon className="!text-2xl text-white" />

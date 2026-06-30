@@ -8,23 +8,27 @@ import {
   Tooltip,
   IconButton,
 } from '@mui/material';
-import { Close, Settings } from '@mui/icons-material';
+import { Close, Layers } from '@mui/icons-material';
 import gsap from 'gsap';
 
-const panelClass =
+const mapControlShellClass =
   'inline-flex flex-col gap-2 rounded-xl border border-white/15 bg-slate-950/75 p-3 font-bold text-white ' +
   'backdrop-blur-md transition-all duration-300 ease-smooth w-max max-w-[min(18rem,calc(100vw-2rem))] ' +
   'hover:border-white/25';
+
+export const mapButtonClass = `${mapControlShellClass} cursor-pointer`;
+
+export const mapIconButtonSx = {
+  p: 0,
+  '&:hover': { backgroundColor: 'rgba(255,255,255,0.08)' },
+};
+
+const panelClass = mapControlShellClass;
 
 const layerRowClass =
   'climate-layer-row rounded-lg py-0.5 pl-0 pr-1 transition-colors hover:bg-white/5';
 
 const checkboxClass = '!text-sky-400 !py-1 !pl-0 !pr-1';
-
-const iconButtonSx = {
-  p: 0,
-  '&:hover': { backgroundColor: 'rgba(255,255,255,0.08)' },
-};
 
 const closeIconSx = {
   color: 'rgba(255,255,255,0.9)',
@@ -82,30 +86,30 @@ const ClimateLayers = ({ layers, setLayers }) => {
 
   if (!open) {
     return (
-      <div
-        className={`${panelClass} cursor-pointer`}
-        onClick={() => setOpen(true)}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            setOpen(true);
-          }
-        }}
-      >
-        <Tooltip title="Layers" placement="bottom" arrow>
+      <Tooltip title="Layers" placement="bottom" arrow>
+        <div
+          className={mapButtonClass}
+          onClick={() => setOpen(true)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setOpen(true);
+            }
+          }}
+        >
           <IconButton
             onClick={(e) => {
               e.stopPropagation();
               setOpen(true);
             }}
-            sx={iconButtonSx}
+            sx={mapIconButtonSx}
           >
-            <Settings className="!text-2xl text-white" />
+            <Layers className="!text-2xl text-white" />
           </IconButton>
-        </Tooltip>
-      </div>
+        </div>
+      </Tooltip>
     );
   }
 
