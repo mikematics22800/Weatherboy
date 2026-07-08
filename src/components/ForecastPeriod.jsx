@@ -1,3 +1,4 @@
+import { Speed, Thermostat, WaterDrop } from "@mui/icons-material"
 import { formatDewPointK, formatTempK, getTime, getDay } from "../libs/conversions"
 
 const icon = (weatherIcon, size) => `https://openweathermap.org/img/wn/${weatherIcon}${size}.png`
@@ -25,17 +26,17 @@ const ForecastPeriod = ({ period }) => {
         </div>
         <div className="weather-details">
           <div className="detail-row">
-            <span className="detail-label">Temperature</span>
+            <Thermostat className="stat-metric-icon" aria-label="Temperature" />
             <span className="detail-value">{formatTempK(period.main.temp)}</span>
           </div>
           <div className="detail-row">
-            <span className="detail-label">Dew Point</span>
+            <WaterDrop className="stat-metric-icon" aria-label="Dew Point" />
             <span className="detail-value">
               {formatDewPointK(period.main.temp, period.main.humidity)}
             </span>
           </div>
           <div className="detail-row">
-            <span className="detail-label">Air Pressure</span>
+            <Speed className="stat-metric-icon" aria-label="Air Pressure" />
             <span className="detail-value">{period.main.pressure} mb</span>
           </div>
         </div>
